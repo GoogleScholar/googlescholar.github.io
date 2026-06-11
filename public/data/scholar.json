@@ -3,10 +3,11 @@
     "kind": "google-scholar-dom",
     "user": "vJjq9LwAAAAJ",
     "url": "https://scholar.google.com/citations?user=vJjq9LwAAAAJ&hl=en&pagesize=100&view_op=list_works&sortby=pubdate",
-    "fetchedAt": "2026-06-11T22:47:35.742Z",
+    "fetchedAt": "2026-06-11T23:12:27.283Z",
     "profileName": "Fredrik Erlandsson",
     "affiliation": "Blekinge Institute of Technology | University of Califonia, Davis",
-    "verifiedEmail": "Verified email at bth.se"
+    "verifiedEmail": "Verified email at bth.se",
+    "avatarUrl": "https://scholar.googleusercontent.com/citations?view_op=view_photo&user=vJjq9LwAAAAJ&citpid=3"
   },
   "metrics": {
     "totalCitations": 341,

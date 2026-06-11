@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "fetch:scholar": "node scripts/fetch-scholar.mjs",
+    "import:scholar-json": "node scripts/import-scholar-json.mjs",
     "test": "vitest run"
   },
   "dependencies": {

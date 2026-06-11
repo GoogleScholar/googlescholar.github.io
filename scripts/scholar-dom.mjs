@@ -68,6 +68,7 @@ export function generateBibtex(publication) {
 export function parseProfileHtml(html, options = {}) {
   const $ = cheerio.load(html);
   const profileName = cleanText($('#gsc_prf_in').text());
+  const avatarUrl = toScholarUrl($('#gsc_prf_pup-img').attr('src')) || '';
   const profileLines = $('.gsc_prf_il')
     .map((_, element) => cleanText($(element).text()))
     .get()
@@ -146,7 +147,8 @@ export function parseProfileHtml(html, options = {}) {
       fetchedAt: options.fetchedAt || new Date().toISOString(),
       profileName,
       affiliation: profileLines[0] || '',
-      verifiedEmail: profileLines.find((line) => /verified email/i.test(line)) || ''
+      verifiedEmail: profileLines.find((line) => /verified email/i.test(line)) || '',
+      avatarUrl
     },
     metrics: {
       totalCitations: summary.citations?.all ?? 0,

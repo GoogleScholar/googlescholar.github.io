@@ -5,6 +5,7 @@ const profileFixture = `
 <html>
   <body>
     <div id="gsc_prf_in">Ada Scholar</div>
+    <img id="gsc_prf_pup-img" src="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=abc" alt="Ada Scholar" />
     <div class="gsc_prf_il">Example University</div>
     <div class="gsc_prf_il">Verified email at example.edu</div>
     <table id="gsc_rsb_st">
@@ -36,6 +37,7 @@ describe('parseProfileHtml', () => {
     });
 
     expect(parsed.source.profileName).toBe('Ada Scholar');
+    expect(parsed.source.avatarUrl).toContain('view_photo');
     expect(parsed.source.affiliation).toBe('Example University');
     expect(parsed.metrics.totalCitations).toBe(1234);
     expect(parsed.metrics.hIndex).toBe(22);

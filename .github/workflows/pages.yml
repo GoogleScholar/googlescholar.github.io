@@ -26,6 +26,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     env:
       SCHOLAR_USER_ID: ${{ vars.SCHOLAR_USER_ID || 'vJjq9LwAAAAJ' }}
+      SCHOLAR_SOURCE_URL: ${{ vars.SCHOLAR_SOURCE_URL }}
+      SCHOLAR_PROFILE_NAME: ${{ vars.SCHOLAR_PROFILE_NAME }}
+      SCHOLAR_AFFILIATION: ${{ vars.SCHOLAR_AFFILIATION }}
+      SCHOLAR_AVATAR_URL: ${{ vars.SCHOLAR_AVATAR_URL }}
       SCHOLAR_FETCH_DETAILS: ${{ vars.SCHOLAR_FETCH_DETAILS || 'false' }}
       SCHOLAR_CITED_LIMIT: ${{ vars.SCHOLAR_CITED_LIMIT || '0' }}
       SCHOLAR_MAX_PUBLICATIONS: ${{ vars.SCHOLAR_MAX_PUBLICATIONS || '100' }}
@@ -42,9 +46,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Refresh Scholar DOM data
+      - name: Refresh Scholar data
         continue-on-error: true
-        run: npm run fetch:scholar -- --user "$SCHOLAR_USER_ID" --out public/data/scholar.json
+        run: |
+          if [ -n "$SCHOLAR_SOURCE_URL" ]; then
+            npm run import:scholar-json -- --url "$SCHOLAR_SOURCE_URL" --out public/data/scholar.json
+          else
+            npm run fetch:scholar -- --user "$SCHOLAR_USER_ID" --out public/data/scholar.json
+          fi
 
       - name: Test
         run: npm test
