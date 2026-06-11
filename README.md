@@ -1,39 +1,109 @@
-GoogleScholar API
------------------
+# Google Scholar Pages
 
-Simple API that parses information from https://scholar.google.se/citations. 
+A GitHub Pages publication dashboard generated from Google Scholar DOM data.
 
-Outputs the publications on the first page together with the Citation indeces. Live sample can be found here: http://cse.bth.se/~fer/googlescholar-api/googlescholar.php?user=vJjq9LwAAAAJ do note that the `user=<google-scholar-id>` must be set. Do note that there is no verification of the input variable `user`, this makes it possible to append `%26view_op=list_works%26sortby=pubdate` after the `scholar-id` to get the publications sorted by year (newest first).
+The project keeps the original DOM-scraping idea, but separates it into two deployable pieces:
 
-Sample output:
+- `googlescholar.php`: a PHP JSON endpoint for hosts that can run PHP.
+- `scripts/fetch-scholar.mjs`: a Node DOM scraper used by GitHub Actions to generate `public/data/scholar.json`.
+- `src/`: a Vite + React frontend that renders the static JSON on GitHub Pages.
+
+Google Scholar does not provide an official public API, so this project intentionally avoids third-party citation APIs and parses Scholar HTML selectors instead.
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+The app reads `public/data/scholar.json` by default.
+
+Refresh the JSON from a Scholar profile:
+
+```bash
+npm run fetch:scholar -- --user vJjq9LwAAAAJ --out public/data/scholar.json
+```
+
+Fetch publication detail pages and a small sample of citing papers:
+
+```bash
+npm run fetch:scholar -- --user vJjq9LwAAAAJ --details --cited-limit 3
+```
+
+Detail fetching makes additional Google Scholar requests and can be rate limited. Keep the limit small.
+
+## GitHub Pages
+
+This repository is configured to deploy with `.github/workflows/pages.yml`.
+
+In the repository settings:
+
+1. Enable GitHub Pages.
+2. Set the Pages source to GitHub Actions.
+3. Add repository variables as needed:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SCHOLAR_USER_ID` | `vJjq9LwAAAAJ` | Google Scholar profile id to publish |
+| `SCHOLAR_FETCH_DETAILS` | `false` | Set to `true` to fetch publication detail pages |
+| `SCHOLAR_CITED_LIMIT` | `0` | Number of citing-paper samples per publication |
+| `SCHOLAR_MAX_PUBLICATIONS` | `100` | Detail-fetch limit |
+
+The workflow refreshes the DOM data, runs tests, builds the React app, and deploys `dist/`.
+
+## Frontend data
+
+The dashboard supports these data sources:
+
+- Static Pages data: `public/data/scholar.json`.
+- A custom JSON URL: `https://googlescholar.github.io/?data=https://example.com/scholar.json`.
+- A PHP endpoint configured at build time with `VITE_SCHOLAR_API_URL` and `VITE_SCHOLAR_USER_ID`.
+
+The JSON shape is:
 
 ```json
 {
- "total_citations": 58,
- "citations_per_year": {
-  "2012 ": 1 ,
-  "2013 ": 7 ,
-  "2014 ": 13 ,
-  "2015 ": 10 ,
-  "2016 ": 23 ,
-  "2017 ": 2 
- },
- "publications": [
-  {
-    "title": "Privacy threats related to user profiling in online social networks",
-    "authors": "F Erlandsson, M Boldt, H Johnson",
-    "venue": "Privacy, Security, Risk and Trust (PASSAT), 2012 International Conference on ..., 2012 ",
-    "citations": 18,
-    "year": 2012 
+  "source": {
+    "kind": "google-scholar-dom",
+    "user": "vJjq9LwAAAAJ",
+    "profileName": "Scholar Name",
+    "fetchedAt": "2026-06-11T00:00:00.000Z"
   },
-  {
-    "title": "SIN: A Platform to Make Interactions in Social Networks Accessible",
-    "authors": "SFW Roozbeh Nia, Fredrik Erlandsson, Prantik",
-    "venue": "ASE International Conference on Social Informatics, 2012 ",
-    "citations": 10,
-    "year": 2012
-  }
- ]
+  "metrics": {
+    "totalCitations": 341,
+    "hIndex": 12,
+    "i10Index": 20,
+    "citationsPerYear": {
+      "2025": 11
+    }
+  },
+  "publications": [
+    {
+      "title": "Paper title",
+      "authors": "A Author, B Author",
+      "venue": "Venue, 2025",
+      "citations": 42,
+      "year": 2025,
+      "links": {
+        "scholar": "https://scholar.google.com/...",
+        "citedBy": "https://scholar.google.com/...",
+        "related": "https://scholar.google.com/...",
+        "external": "https://publisher.example/paper"
+      },
+      "bibtex": "@article{...}",
+      "relatedPapers": []
+    }
+  ]
 }
 ```
-  
+
+## PHP endpoint
+
+For PHP hosting:
+
+```text
+https://your-host.example/googlescholar.php?user=vJjq9LwAAAAJ
+```
+
+The endpoint validates the Scholar profile id, fetches the Scholar profile DOM, and returns structured JSON with profile metrics, citation history, publications, links, and generated BibTeX entries.

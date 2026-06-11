@@ -1,0 +1,301 @@
+{
+  "source": {
+    "kind": "google-scholar-dom",
+    "user": "vJjq9LwAAAAJ",
+    "url": "https://scholar.google.com/citations?user=vJjq9LwAAAAJ&hl=en&pagesize=100&view_op=list_works&sortby=pubdate",
+    "fetchedAt": "2026-06-11T22:47:35.742Z",
+    "profileName": "Fredrik Erlandsson",
+    "affiliation": "Blekinge Institute of Technology | University of Califonia, Davis",
+    "verifiedEmail": "Verified email at bth.se"
+  },
+  "metrics": {
+    "totalCitations": 341,
+    "hIndex": 10,
+    "i10Index": 10,
+    "summary": {
+      "citations": {
+        "all": 341,
+        "recent": 126
+      },
+      "h_index": {
+        "all": 10,
+        "recent": 5
+      },
+      "i10_index": {
+        "all": 10,
+        "recent": 4
+      }
+    },
+    "citationsPerYear": {
+      "2012": 1,
+      "2013": 6,
+      "2014": 15,
+      "2015": 13,
+      "2016": 23,
+      "2017": 29,
+      "2018": 39,
+      "2019": 40,
+      "2020": 40,
+      "2021": 23,
+      "2022": 32,
+      "2023": 28,
+      "2024": 26,
+      "2025": 11,
+      "2026": 6
+    }
+  },
+  "publications": [
+    {
+      "id": "vJjq9LwAAAAJ:EUQCXRtRnyEC",
+      "title": "Visualizing modus operandi similarity between burglaries in a city",
+      "authors": "MB F Erlandsson, A Borg",
+      "venue": "NetCrime 2018 3nd Symposium on the Structure and Mobility of Crime, 2018",
+      "citations": 0,
+      "year": 2018,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:EUQCXRtRnyEC",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{mbferlandsson2018visualizing,\n  title = {Visualizing modus operandi similarity between burglaries in a city},\n  author = {MB F Erlandsson and A Borg},\n  journal = {NetCrime 2018 3nd Symposium on the Structure and Mobility of Crime, 2018},\n  year = {2018},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:EUQCXRtRnyEC},\n  note = {Cited by 0}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:bFI3QPDXJZMC",
+      "title": "Human Interactions on Online Social Media: Collecting and Analyzing Social Interaction Networks",
+      "authors": "F Erlandsson",
+      "venue": "Blekinge Tekniska Högskola, 2018",
+      "citations": 0,
+      "year": 2018,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:bFI3QPDXJZMC",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2018human,\n  title = {Human Interactions on Online Social Media: Collecting and Analyzing Social Interaction Networks},\n  author = {F Erlandsson},\n  journal = {Blekinge Tekniska Högskola, 2018},\n  year = {2018},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:bFI3QPDXJZMC},\n  note = {Cited by 0}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:yD5IFk8b50cC",
+      "title": "Do we really need to catch them all? A new User-guided Social Media Crawling method",
+      "authors": "F Erlandsson, P Bródka, M Boldt, H Johnson",
+      "venue": "Entropy 2017 (19), 686, 2017",
+      "citations": 11,
+      "year": 2017,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:yD5IFk8b50cC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=13203570772348472431"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2017do,\n  title = {Do we really need to catch them all? A new User-guided Social Media Crawling method},\n  author = {F Erlandsson and P Bródka and M Boldt and H Johnson},\n  journal = {Entropy 2017 (19), 686, 2017},\n  year = {2017},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:yD5IFk8b50cC},\n  note = {Cited by 11}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:f2IySw72cVMC",
+      "title": "Seed selection for information cascade in multilayer networks",
+      "authors": "F Erlandsson, P Bródka, A Borg",
+      "venue": "International conference on complex networks and their applications, 426-436, 2017",
+      "citations": 30,
+      "year": 2017,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:f2IySw72cVMC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1943967362442102873"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2017seed,\n  title = {Seed selection for information cascade in multilayer networks},\n  author = {F Erlandsson and P Bródka and A Borg},\n  journal = {International conference on complex networks and their applications, 426-436, 2017},\n  year = {2017},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:f2IySw72cVMC},\n  note = {Cited by 30}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:D03iK_w7-QYC",
+      "title": "Social Coordinates: A Scalable Embedding Framework for Online Social Networks",
+      "authors": "P Pham, F Erlandsson, SF Wu",
+      "venue": "Proceedings of the 2017 International Conference on Machine Learning and …, 2017",
+      "citations": 0,
+      "year": 2017,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:D03iK_w7-QYC",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ppham2017social,\n  title = {Social Coordinates: A Scalable Embedding Framework for Online Social Networks},\n  author = {P Pham and F Erlandsson and SF Wu},\n  journal = {Proceedings of the 2017 International Conference on Machine Learning and …, 2017},\n  year = {2017},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:D03iK_w7-QYC},\n  note = {Cited by 0}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:4OULZ7Gr8RgC",
+      "title": "Finding influential users in social media using association rule learning",
+      "authors": "F Erlandsson, P Bródka, A Borg, H Johnson",
+      "venue": "Entropy 18 (5), 164, 2016",
+      "citations": 143,
+      "year": 2016,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:4OULZ7Gr8RgC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11435529469601797257"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2016finding,\n  title = {Finding influential users in social media using association rule learning},\n  author = {F Erlandsson and P Bródka and A Borg and H Johnson},\n  journal = {Entropy 18 (5), 164, 2016},\n  year = {2016},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:4OULZ7Gr8RgC},\n  note = {Cited by 143}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:fPk4N6BV_jEC",
+      "title": "Predicting user participation in social media",
+      "authors": "F Erlandsson, A Borg, H Johnson, P Bródka",
+      "venue": "International Conference and School on Network Science, 126-135, 2016",
+      "citations": 17,
+      "year": 2016,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:fPk4N6BV_jEC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=15193446750087825971"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2016predicting,\n  title = {Predicting user participation in social media},\n  author = {F Erlandsson and A Borg and H Johnson and P Bródka},\n  journal = {International Conference and School on Network Science, 126-135, 2016},\n  year = {2016},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:fPk4N6BV_jEC},\n  note = {Cited by 17}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:rO6llkc54NcC",
+      "title": "Mining user deliberation and bias in online newsgroups: A dynamic view",
+      "authors": "T Wang, F Erlandsson, SF Wu",
+      "venue": "Proceedings of the 2015 ACM on Conference on Online Social Networks, 209-219, 2015",
+      "citations": 1,
+      "year": 2015,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:rO6llkc54NcC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12260140983451142330"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{twang2015mining,\n  title = {Mining user deliberation and bias in online newsgroups: A dynamic view},\n  author = {T Wang and F Erlandsson and SF Wu},\n  journal = {Proceedings of the 2015 ACM on Conference on Online Social Networks, 209-219, 2015},\n  year = {2015},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:rO6llkc54NcC},\n  note = {Cited by 1}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:zA6iFVUQeVQC",
+      "title": "Crawling online social networks",
+      "authors": "F Erlandsson, R Nia, M Boldt, H Johnson, SF Wu",
+      "venue": "2015 Second European Network Intelligence Conference, 9-16, 2015",
+      "citations": 50,
+      "year": 2015,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:zA6iFVUQeVQC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=5036481671916546124"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2015crawling,\n  title = {Crawling online social networks},\n  author = {F Erlandsson and R Nia and M Boldt and H Johnson and SF Wu},\n  journal = {2015 Second European Network Intelligence Conference, 9-16, 2015},\n  year = {2015},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:zA6iFVUQeVQC},\n  note = {Cited by 50}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:pqnbT2bcN3wC",
+      "title": "On social interaction metrics : social network crawling based on interestingness",
+      "authors": "F Erlandsson",
+      "venue": "Department of Computer Science and Engineering, 2014",
+      "citations": 1,
+      "year": 2014,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:pqnbT2bcN3wC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=6678498032650687893"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2014on,\n  title = {On social interaction metrics : social network crawling based on interestingness},\n  author = {F Erlandsson},\n  journal = {Department of Computer Science and Engineering, 2014},\n  year = {2014},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:pqnbT2bcN3wC},\n  note = {Cited by 1}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:2osOgNQ5qMEC",
+      "title": "Making Social Interactions Accessible in Online Social Networks",
+      "authors": "F Erlandsson, R Nia, H Johnson, F Wu",
+      "venue": "Information Services and Use 33 (2 / 2013), 113-117, 2013",
+      "citations": 12,
+      "year": 2013,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:2osOgNQ5qMEC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=9671422234485177800"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2013making,\n  title = {Making Social Interactions Accessible in Online Social Networks},\n  author = {F Erlandsson and R Nia and H Johnson and F Wu},\n  journal = {Information Services and Use 33 (2 / 2013), 113-117, 2013},\n  year = {2013},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:2osOgNQ5qMEC},\n  note = {Cited by 12}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:qjMakFHDy7sC",
+      "title": "The Influence of Feedback with Different Opinions on User Continued Participation in Online Newsgroups",
+      "authors": "T Wang, KC Wang, F Erlandsson, SF Wu, R Faris",
+      "venue": "IEEE/ACM International Conference on Advances in Social Networks Analysis …, 2013",
+      "citations": 13,
+      "year": 2013,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:qjMakFHDy7sC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11410233355756273230,13875288599518932625"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{twang2013the,\n  title = {The Influence of Feedback with Different Opinions on User Continued Participation in Online Newsgroups},\n  author = {T Wang and KC Wang and F Erlandsson and SF Wu and R Faris},\n  journal = {IEEE/ACM International Conference on Advances in Social Networks Analysis …, 2013},\n  year = {2013},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:qjMakFHDy7sC},\n  note = {Cited by 13}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:W7OEmFMy1HYC",
+      "title": "Leveraging social interactions to suggest friends",
+      "authors": "R Nia, F Erlandsson, H Johnson, SF Wu",
+      "venue": "2013 IEEE 33rd International Conference on Distributed Computing Systems …, 2013",
+      "citations": 13,
+      "year": 2013,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:W7OEmFMy1HYC",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=838936437992487494"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{rnia2013leveraging,\n  title = {Leveraging social interactions to suggest friends},\n  author = {R Nia and F Erlandsson and H Johnson and SF Wu},\n  journal = {2013 IEEE 33rd International Conference on Distributed Computing Systems …, 2013},\n  year = {2013},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:W7OEmFMy1HYC},\n  note = {Cited by 13}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:u5HHmVD_uO8C",
+      "title": "SIN: A Platform to Make Interactions in Social Networks Accessible",
+      "authors": "SFW Roozbeh Nia, Fredrik Erlandsson, Prantik",
+      "venue": "ASE International Conference on Social Informatics, 2012",
+      "citations": 13,
+      "year": 2012,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:u5HHmVD_uO8C",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3739871500825793644"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{sfwroozbehnia2012sin,\n  title = {SIN: A Platform to Make Interactions in Social Networks Accessible},\n  author = {SFW Roozbeh Nia and Fredrik Erlandsson and Prantik},\n  journal = {ASE International Conference on Social Informatics, 2012},\n  year = {2012},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:u5HHmVD_uO8C},\n  note = {Cited by 13}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:d1gkVwhDpl0C",
+      "title": "Privacy threats related to user profiling in online social networks",
+      "authors": "F Erlandsson, M Boldt, H Johnson",
+      "venue": "Privacy, Security, Risk and Trust (PASSAT), 2012 International Conference on …, 2012",
+      "citations": 37,
+      "year": 2012,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:d1gkVwhDpl0C",
+        "citedBy": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=13416336904247992380"
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2012privacy,\n  title = {Privacy threats related to user profiling in online social networks},\n  author = {F Erlandsson and M Boldt and H Johnson},\n  journal = {Privacy, Security, Risk and Trust (PASSAT), 2012 International Conference on …, 2012},\n  year = {2012},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:d1gkVwhDpl0C},\n  note = {Cited by 37}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:HoB7MX3m0LUC",
+      "title": "S-UDDI: using Web services, the Secure and Trustworthy way",
+      "authors": "F Erlandsson, D Evertsson",
+      "venue": "",
+      "citations": 0,
+      "year": 2005,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:HoB7MX3m0LUC",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{ferlandsson2005suddi,\n  title = {S-UDDI: using Web services, the Secure and Trustworthy way},\n  author = {F Erlandsson and D Evertsson},\n  year = {2005},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:HoB7MX3m0LUC},\n  note = {Cited by 0}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:NhqRSupF_l8C",
+      "title": "EISIC 2018",
+      "authors": "P Karampelas, M Boldt, A Borg, J Brynielsson, T Bourlai, L Kaati, I Lekea, ...",
+      "venue": "",
+      "citations": 0,
+      "year": 0,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:NhqRSupF_l8C",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{pkarampelasndeisic,\n  title = {EISIC 2018},\n  author = {P Karampelas and M Boldt and A Borg and J Brynielsson and T Bourlai and L Kaati and I Lekea and ...},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:NhqRSupF_l8C},\n  note = {Cited by 0}\n}"
+    },
+    {
+      "id": "vJjq9LwAAAAJ:u_35RYKgDlwC",
+      "title": "SNA/SMA Track Program Committee",
+      "authors": "M Ahmad, M Bielikova, F Chua, M Coscia, PE Damiani, ...",
+      "venue": "",
+      "citations": 0,
+      "year": 0,
+      "links": {
+        "scholar": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:u_35RYKgDlwC",
+        "citedBy": null
+      },
+      "relatedPapers": [],
+      "bibtex": "@article{mahmadndsnasma,\n  title = {SNA/SMA Track Program Committee},\n  author = {M Ahmad and M Bielikova and F Chua and M Coscia and PE Damiani and ...},\n  url = {https://scholar.google.com/citations?view_op=view_citation&hl=en&user=vJjq9LwAAAAJ&pagesize=100&sortby=pubdate&citation_for_view=vJjq9LwAAAAJ:u_35RYKgDlwC},\n  note = {Cited by 0}\n}"
+    }
+  ]
+}

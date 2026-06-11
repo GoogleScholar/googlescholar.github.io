@@ -1,0 +1,24 @@
+{
+  "name": "googlescholar-pages",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "fetch:scholar": "node scripts/fetch-scholar.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  }
+}
