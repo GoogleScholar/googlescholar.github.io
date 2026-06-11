@@ -51,6 +51,7 @@ In the repository settings:
 | `SCHOLAR_MAX_PUBLICATIONS` | `100` | Detail-fetch limit |
 
 The workflow refreshes the DOM data, runs tests, builds the React app, and deploys `dist/`.
+The refresh step is best effort so temporary Scholar blocking does not prevent Pages from deploying with the committed JSON file.
 
 ## Frontend data
 

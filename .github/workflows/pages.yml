@@ -43,6 +43,7 @@ jobs:
         run: npm ci
 
       - name: Refresh Scholar DOM data
+        continue-on-error: true
         run: npm run fetch:scholar -- --user "$SCHOLAR_USER_ID" --out public/data/scholar.json
 
       - name: Test
