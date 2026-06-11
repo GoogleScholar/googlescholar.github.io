@@ -26,14 +26,6 @@ function getDataUrl() {
     return explicitDataUrl;
   }
 
-  const apiUrl = import.meta.env.VITE_SCHOLAR_API_URL;
-  const user = params.get('user') || import.meta.env.VITE_SCHOLAR_USER_ID;
-  if (apiUrl && user) {
-    const url = new URL(apiUrl, window.location.href);
-    url.searchParams.set('user', user);
-    return url.toString();
-  }
-
   return `${import.meta.env.BASE_URL}data/scholar.json`;
 }
 

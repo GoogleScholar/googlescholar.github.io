@@ -2,11 +2,11 @@
 
 A GitHub Pages publication dashboard generated from Google Scholar DOM data.
 
-The project keeps the original DOM-scraping idea, but separates it into two deployable pieces:
+The implementation is fully static at runtime:
 
-- `googlescholar.php`: a PHP JSON endpoint for hosts that can run PHP.
-- `scripts/fetch-scholar.mjs`: a Node DOM scraper used by GitHub Actions to generate `public/data/scholar.json`.
-- `src/`: a Vite + React frontend that renders the static JSON on GitHub Pages.
+- `scripts/fetch-scholar.mjs` fetches and parses Google Scholar DOM pages with Node and Cheerio.
+- `public/data/scholar.json` stores the generated profile data used by the site.
+- `src/` contains the Vite + React dashboard deployed to GitHub Pages.
 
 Google Scholar does not provide an official public API, so this project intentionally avoids third-party citation APIs and parses Scholar HTML selectors instead.
 
@@ -59,7 +59,6 @@ The dashboard supports these data sources:
 
 - Static Pages data: `public/data/scholar.json`.
 - A custom JSON URL: `https://googlescholar.github.io/?data=https://example.com/scholar.json`.
-- A PHP endpoint configured at build time with `VITE_SCHOLAR_API_URL` and `VITE_SCHOLAR_USER_ID`.
 
 The JSON shape is:
 
@@ -98,13 +97,3 @@ The JSON shape is:
   ]
 }
 ```
-
-## PHP endpoint
-
-For PHP hosting:
-
-```text
-https://your-host.example/googlescholar.php?user=vJjq9LwAAAAJ
-```
-
-The endpoint validates the Scholar profile id, fetches the Scholar profile DOM, and returns structured JSON with profile metrics, citation history, publications, links, and generated BibTeX entries.
