@@ -397,6 +397,10 @@ function ProfileBanner({ avatarUrl, profileName, affiliation, publications, metr
 
 function PaperCard({ publication, isExpanded, onToggle }) {
   const [copied, setCopied] = useState(false);
+  const [citedByData, setCitedByData] = useState(null);
+  const [citedByLoading, setCitedByLoading] = useState(false);
+  const [citedByError, setCitedByError] = useState('');
+  const [showCitationAnalysis, setShowCitationAnalysis] = useState(false);
   
   async function copyBibtex(event) {
     event.stopPropagation();
@@ -404,6 +408,41 @@ function PaperCard({ publication, isExpanded, onToggle }) {
     await navigator.clipboard.writeText(publication.bibtex);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1400);
+  }
+
+  async function loadCitations(event) {
+    event.stopPropagation();
+    
+    if (showCitationAnalysis) {
+      setShowCitationAnalysis(false);
+      return;
+    }
+    
+    setShowCitationAnalysis(true);
+    if (!isExpanded) onToggle();
+    
+    if (citedByData || citedByLoading || !publication.links.citedBy) return;
+    
+    setCitedByLoading(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/cited-by?url=${encodeURIComponent(publication.links.citedBy)}&limit=100`);
+      if (!response.ok) throw new Error('Failed to load citations');
+      const data = await response.json();
+      
+      const years = {};
+      data.items.forEach(item => {
+        if (item.year) {
+           years[item.year] = (years[item.year] || 0) + 1;
+        }
+      });
+      data.citationsPerYear = years;
+      
+      setCitedByData(data);
+    } catch (e) {
+      setCitedByError(e.message);
+    } finally {
+      setCitedByLoading(false);
+    }
   }
 
   return (
@@ -416,10 +455,16 @@ function PaperCard({ publication, isExpanded, onToggle }) {
           
           <div className="md-chip-group" style={{ marginTop: '12px' }}>
             <span className="md-chip">{publication.year || 'n.d.'}</span>
-            <span className="md-chip">
+            <button 
+              className="md-chip" 
+              style={{ cursor: publication.citations > 0 ? 'pointer' : 'default', border: showCitationAnalysis ? '1px solid var(--md-primary)' : '1px solid transparent' }}
+              onClick={publication.citations > 0 ? loadCitations : undefined}
+              disabled={publication.citations === 0}
+              title="Click to analyze citations"
+            >
               <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
               {formatNumber(publication.citations)} citations
-            </span>
+            </button>
           </div>
         </div>
         
@@ -448,6 +493,35 @@ function PaperCard({ publication, isExpanded, onToggle }) {
             </div>
           </div>
         </div>
+
+        {showCitationAnalysis && (
+          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--md-outline-variant)' }}>
+             <h4 className="md-title" style={{ marginBottom: '16px' }}>Citation Analysis</h4>
+             {citedByLoading && <div className="md-body">Loading citing papers...</div>}
+             {citedByError && <div className="md-body" style={{ color: 'var(--md-error)' }}>{citedByError}</div>}
+             {citedByData && (
+               <>
+                 {Object.keys(citedByData.citationsPerYear).length > 0 && (
+                   <div style={{ height: '120px', marginBottom: '24px' }}>
+                     <CitationTimeline citationsPerYear={citedByData.citationsPerYear} />
+                   </div>
+                 )}
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                   {citedByData.items.map((item, idx) => (
+                     <div key={idx} style={{ padding: '12px', backgroundColor: 'var(--md-surface-variant)', borderRadius: 'var(--md-border-radius-sm)' }}>
+                       <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 500, color: 'var(--md-primary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
+                         {item.title}
+                       </a>
+                       <p style={{ fontSize: '12px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
+                       <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.8 }}>{item.snippet}</div>
+                     </div>
+                   ))}
+                   {citedByData.items.length === 0 && <div className="md-body">No citing papers found.</div>}
+                 </div>
+               </>
+             )}
+          </div>
+        )}
       </div>
     </div>
   );
