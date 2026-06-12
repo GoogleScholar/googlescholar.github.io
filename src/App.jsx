@@ -184,7 +184,13 @@ export default function App() {
           <span className="md-headline">Scholar Analytics</span>
         </a>
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button className="md-btn-icon" onClick={() => setDarkMode(!darkMode)} title="Toggle Dark Mode">
+          <button 
+            className="md-btn-icon" 
+            onClick={() => setDarkMode(!darkMode)} 
+            title="Toggle Dark Mode"
+            aria-label="Toggle Dark Mode"
+            aria-pressed={darkMode}
+          >
             <span className="md-icon">{darkMode ? 'light_mode' : 'dark_mode'}</span>
           </button>
           <a className="md-btn-text" href="https://github.com/GoogleScholar/googlescholar.github.io" target="_blank" rel="noreferrer">
@@ -498,8 +504,14 @@ function PaperCard({ publication, isExpanded, onToggle }) {
           </div>
         </div>
         
-        <button className="md-btn-icon" onClick={onToggle}>
-          <span className="md-icon">{isExpanded ? 'expand_less' : 'expand_more'}</span>
+        <button 
+          className="md-btn-icon" 
+          onClick={onToggle}
+          aria-expanded={isExpanded}
+          aria-label={isExpanded ? "Collapse paper details" : "Expand paper details"}
+          title={isExpanded ? "Collapse" : "Expand"}
+        >
+          <span className="md-icon" aria-hidden="true">{isExpanded ? 'expand_less' : 'expand_more'}</span>
         </button>
       </div>
 
