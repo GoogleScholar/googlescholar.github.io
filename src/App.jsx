@@ -17,6 +17,13 @@ function getInitialUserId() {
   return params.get('user') || '';
 }
 
+function getInitialDarkMode() {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  return false;
+}
+
 function getRecentProfiles() {
   try {
     const data = localStorage.getItem('scholar_recent_profiles');
@@ -36,13 +43,6 @@ function saveRecentProfile(profile) {
   } catch (e) {
     console.error('Failed to save recent profile', e);
   }
-}
-
-function getInitialDarkMode() {
-  if (typeof window !== 'undefined' && window.matchMedia) {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
-  return false;
 }
 
 export default function App() {
@@ -172,24 +172,16 @@ export default function App() {
   }, [publications, query, sortBy, yearFilter]);
 
   const metrics = data?.metrics || {};
-  const totalPaperCitations = publications.reduce((sum, publication) => sum + publication.citations, 0);
   const profileName = data?.source?.profileName || 'Scholar profile';
   const affiliation = data?.source?.affiliation || '';
   const avatarUrl = data?.source?.avatarUrl || '';
-  const hasFilters = query || yearFilter !== 'all' || sortBy !== 'citations';
-
-  function resetFilters() {
-    setQuery('');
-    setYearFilter('all');
-    setSortBy('citations');
-  }
 
   return (
     <>
       <header className="md-app-bar">
         <a className="brand" href="/" onClick={goHome}>
           <span className="md-icon" style={{ color: 'var(--md-primary)' }}>school</span>
-          <span className="md-title">Scholar Pages</span>
+          <span className="md-headline">Scholar Analytics</span>
         </a>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className="md-btn-icon" onClick={() => setDarkMode(!darkMode)} title="Toggle Dark Mode">
@@ -224,78 +216,59 @@ export default function App() {
 
       {userId && !status.loading && !status.error && data && (
         <div className="md-layout">
-          <aside className="md-sidebar">
-            <div className="md-input-group">
-              <label className="md-input-label">Search papers</label>
-              <div className="md-input-wrapper">
-                <span className="md-icon">search</span>
-                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
+          <ProfileBanner
+            avatarUrl={avatarUrl}
+            profileName={profileName}
+            affiliation={affiliation}
+            metrics={metrics}
+          />
+
+          {metrics.citationsPerYear && Object.keys(metrics.citationsPerYear).length > 0 && (
+            <div className="md-card" style={{ marginBottom: '32px' }}>
+              <div className="md-card-header" style={{ marginBottom: '16px' }}>
+                <h2 className="md-headline">Citations by year</h2>
               </div>
-            </div>
-
-            <div className="md-input-group">
-              <label className="md-input-label">Year</label>
-              <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)}>
-                <option value="all">All years</option>
-                {years.map(year => <option key={year} value={year}>{year}</option>)}
-              </select>
-            </div>
-
-            <div className="md-input-group">
-              <label className="md-input-label">Sort</label>
-              <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-              </select>
-            </div>
-
-            <button className="md-btn md-btn-text" style={{ marginTop: '8px' }} onClick={resetFilters} disabled={!hasFilters}>
-              <span className="md-icon">restart_alt</span> Reset filters
-            </button>
-          </aside>
-
-          <main className="md-main-content">
-            <ProfileBanner
-              avatarUrl={avatarUrl}
-              profileName={profileName}
-              affiliation={affiliation}
-              publications={publications}
-              metrics={metrics}
-              totalPaperCitations={totalPaperCitations}
-            />
-
-            {metrics.citationsPerYear && Object.keys(metrics.citationsPerYear).length > 0 && (
-              <div className="md-card" style={{ marginBottom: '32px' }}>
-                <div className="md-card-header" style={{ marginBottom: '16px' }}>
-                  <h2 className="md-headline">Citations by year</h2>
-                </div>
-                <div style={{ height: '150px' }}>
+              <div style={{ height: '200px' }}>
                 <CitationTimeline 
                   citationsPerYear={metrics.citationsPerYear}
                   selectedYear={yearFilter}
                   onYearSelect={(year) => setYearFilter(String(year))}
                 />
-                </div>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
-              <div>
-                <h2 className="md-headline">Publications</h2>
-                <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Showing {formatNumber(filteredPublications.length)} papers</p>
               </div>
             </div>
+          )}
 
-            <div>
-              {filteredPublications.map((publication) => (
-                <PaperCard
-                  key={publication.id}
-                  publication={publication}
-                  isExpanded={publication.id === expandedId}
-                  onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
-                />
-              ))}
+          <div className="md-toolbar">
+            <div className="md-input-wrapper">
+              <span className="md-icon">search</span>
+              <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
             </div>
-          </main>
+
+            <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} style={{ width: '160px' }}>
+              <option value="all">All years</option>
+              {years.map(year => <option key={year} value={year}>{year}</option>)}
+            </select>
+
+            <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ width: '160px' }}>
+              {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <h2 className="md-headline">Publications</h2>
+            <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Showing {formatNumber(filteredPublications.length)} papers</p>
+          </div>
+
+          <div>
+            {filteredPublications.map((publication) => (
+              <PaperCard
+                key={publication.id}
+                publication={publication}
+                isExpanded={publication.id === expandedId}
+                onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
+              />
+            ))}
+          </div>
         </div>
       )}
     </>
@@ -316,15 +289,16 @@ function LandingPage({ onNavigate }) {
       <div className="md-landing-hero">
         <h1 className="md-display" style={{ marginBottom: '16px', color: 'var(--md-primary)' }}>Analyze any Scholar Profile</h1>
         <p className="md-body" style={{ fontSize: '18px', color: 'var(--md-on-surface-variant)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
-          Instantly fetch, sort, and analyze publications and citations. 
+          Instantly fetch, sort, and analyze publications and citations with beautiful, interactive visualizations. 
           Enter a Google Scholar ID below to get started.
         </p>
 
-        <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto', display: 'flex', gap: '12px' }}>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', gap: '12px' }}>
           <div className="md-input-wrapper" style={{ flex: 1 }}>
             <span className="md-icon">person</span>
             <input 
               className="md-input" 
+              style={{ fontSize: '16px', padding: '16px 16px 16px 48px' }}
               type="text" 
               value={input} 
               onChange={e => setInput(e.target.value)} 
@@ -332,7 +306,7 @@ function LandingPage({ onNavigate }) {
               required
             />
           </div>
-          <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '16px' }}>
+          <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '18px' }}>
             Analyze
           </button>
         </form>
@@ -341,7 +315,7 @@ function LandingPage({ onNavigate }) {
       {recentProfiles.length > 0 && (
         <div className="md-recent-profiles">
           <h2 className="md-title" style={{ marginBottom: '24px', textAlign: 'center' }}>Recent Profiles</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', maxWidth: '1000px', margin: '0 auto' }}>
             {recentProfiles.map(profile => (
               <div 
                 key={profile.user} 
@@ -350,8 +324,8 @@ function LandingPage({ onNavigate }) {
                 onClick={() => onNavigate(profile.user)}
               >
                 <Avatar name={profile.name} src={profile.avatarUrl} size="large" />
-                <h3 className="md-title" style={{ marginTop: '12px', marginBottom: '4px' }}>{profile.name}</h3>
-                <p className="md-body" style={{ fontSize: '14px', color: 'var(--md-on-surface-variant)' }}>
+                <h3 className="md-title" style={{ marginTop: '16px', marginBottom: '4px' }}>{profile.name}</h3>
+                <p className="md-body" style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)' }}>
                   {truncateText(profile.affiliation, 60)}
                 </p>
                 <span className="md-chip" style={{ marginTop: '16px' }}>{profile.user}</span>
@@ -364,32 +338,43 @@ function LandingPage({ onNavigate }) {
   );
 }
 
-function ProfileBanner({ avatarUrl, profileName, affiliation, publications, metrics, totalPaperCitations }) {
+function ProfileBanner({ avatarUrl, profileName, affiliation, metrics }) {
+  const summary = metrics.summary || {};
   return (
     <div className="md-profile-banner">
-      <Avatar name={profileName} src={avatarUrl} size="large" />
-      <div style={{ flex: 1, minWidth: '250px' }}>
-        <h1 className="md-display">{profileName}</h1>
-        <p className="md-title" style={{ fontWeight: 400, opacity: 0.9 }}>{affiliation}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', minWidth: '150px' }}>
+        <Avatar name={profileName} src={avatarUrl} size="large" />
+      </div>
+      <div style={{ flex: 1, minWidth: '300px' }}>
+        <h1 className="md-display" style={{ marginBottom: '8px' }}>{profileName}</h1>
+        <p className="md-body" style={{ fontSize: '16px', color: 'var(--md-on-surface-variant)', marginBottom: '16px' }}>{affiliation}</p>
         
-        <div className="md-metrics-grid">
-          <div className="md-metric">
-            <span className="md-metric-value">{formatNumber(metrics.totalCitations)}</span>
-            <span className="md-metric-label">Profile Citations</span>
-          </div>
-          <div className="md-metric">
-            <span className="md-metric-value">{formatNumber(publications.length)}</span>
-            <span className="md-metric-label">Publications</span>
-          </div>
-          <div className="md-metric">
-            <span className="md-metric-value">{formatNumber(metrics.hIndex)}</span>
-            <span className="md-metric-label">h-index</span>
-          </div>
-          <div className="md-metric">
-            <span className="md-metric-value">{getPublicationYearRange(publications)}</span>
-            <span className="md-metric-label">Range</span>
-          </div>
-        </div>
+        <table className="md-metrics-table">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>All Time</th>
+              <th>Since 2019/21</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Citations</td>
+              <td>{formatNumber(summary.citations?.all)}</td>
+              <td>{formatNumber(summary.citations?.recent)}</td>
+            </tr>
+            <tr>
+              <td>h-index</td>
+              <td>{formatNumber(summary.h_index?.all)}</td>
+              <td>{formatNumber(summary.h_index?.recent)}</td>
+            </tr>
+            <tr>
+              <td>i10-index</td>
+              <td>{formatNumber(summary.i10_index?.all)}</td>
+              <td>{formatNumber(summary.i10_index?.recent)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -415,6 +400,33 @@ function PaperCard({ publication, isExpanded, onToggle }) {
     }
     return items;
   }, [citedByData, citedBySort]);
+
+  const authorCount = useMemo(() => {
+    return publication.authors ? publication.authors.split(/,|\band\b/i).length : 0;
+  }, [publication.authors]);
+
+  const advancedStats = useMemo(() => {
+    if (!citedByData || !citedByData.citationsPerYear) return null;
+    const years = Object.keys(citedByData.citationsPerYear);
+    if (years.length === 0) return null;
+    
+    let peakYear = years[0];
+    let maxCites = citedByData.citationsPerYear[peakYear];
+    let total = 0;
+    
+    years.forEach(y => {
+      total += citedByData.citationsPerYear[y];
+      if (citedByData.citationsPerYear[y] > maxCites) {
+        maxCites = citedByData.citationsPerYear[y];
+        peakYear = y;
+      }
+    });
+    
+    const span = Math.max(Number(years[years.length - 1]) - Number(years[0]) + 1, 1);
+    const avg = (total / span).toFixed(1);
+    
+    return { peakYear, maxCites, avg };
+  }, [citedByData]);
   
   async function copyBibtex(event) {
     event.stopPropagation();
@@ -479,6 +491,10 @@ function PaperCard({ publication, isExpanded, onToggle }) {
               <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
               {formatNumber(publication.citations)} citations
             </button>
+            <span className="md-chip">
+              <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
+              {authorCount} author{authorCount !== 1 ? 's' : ''}
+            </span>
           </div>
         </div>
         
@@ -487,42 +503,54 @@ function PaperCard({ publication, isExpanded, onToggle }) {
         </button>
       </div>
 
-      <div className="md-card-details">
+      <div className="md-card-details" onClick={(e) => e.stopPropagation()}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-          <div style={{ minWidth: 0 }}>
+          <div style={{ minWidth: 0, position: 'relative' }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>BibTeX</span>
             <pre>{publication.bibtex || 'No BibTeX available'}</pre>
-            <button className="md-btn md-btn-text" style={{ marginTop: '8px' }} onClick={copyBibtex} disabled={!publication.bibtex}>
-              <span className="md-icon">{copied ? 'check' : 'content_copy'}</span>
-              {copied ? 'Copied' : 'Copy BibTeX'}
+            <button className="md-btn md-btn-text" style={{ position: 'absolute', top: '24px', right: '8px', padding: '4px 8px', fontSize: '12px' }} onClick={copyBibtex} disabled={!publication.bibtex}>
+              <span className="md-icon" style={{ fontSize: '16px' }}>{copied ? 'check' : 'content_copy'}</span>
+              {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
           
           <div style={{ minWidth: 0 }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Links</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
-              <LinkButton href={publication.links.scholar} icon="school" label="Scholar" />
-              <LinkButton href={publication.links.external} icon="open_in_new" label="Publication" />
-              <LinkButton href={publication.links.citedBy} icon="format_quote" label="Cited by" />
+              <LinkButton href={publication.links.scholar} icon="school" label="View on Google Scholar" />
+              <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
+              <LinkButton href={publication.links.citedBy} icon="format_quote" label="View Citing Papers" />
             </div>
           </div>
         </div>
 
         {showCitationAnalysis && (
           <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--md-outline-variant)' }}>
-             <h4 className="md-title" style={{ marginBottom: '16px' }}>Citation Analysis</h4>
-             {citedByLoading && <div className="md-body">Loading citing papers...</div>}
-             {citedByError && <div className="md-body" style={{ color: 'var(--md-error)' }}>{citedByError}</div>}
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
+               <div>
+                 <h4 className="md-headline" style={{ color: 'var(--md-primary)' }}>Citation Analytics</h4>
+                 <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Fetching up to 100 recent citations directly from Google Scholar.</p>
+               </div>
+               {advancedStats && (
+                 <div className="md-stats-bar">
+                   <span><strong>Peak Year:</strong> {advancedStats.peakYear} ({advancedStats.maxCites} citations)</span>
+                   <span><strong>Avg:</strong> {advancedStats.avg} / year</span>
+                 </div>
+               )}
+             </div>
+
+             {citedByLoading && <div className="md-state-panel" style={{ height: '200px' }}><span className="md-icon" style={{ animation: 'spin 1s linear infinite', fontSize: '32px' }}>refresh</span></div>}
+             {citedByError && <div className="md-state-panel" style={{ height: '200px', color: 'var(--md-error)' }}>{citedByError}</div>}
              {citedByData && (
                <>
                  {Object.keys(citedByData.citationsPerYear).length > 0 && (
-                   <div style={{ height: '120px', marginBottom: '24px' }}>
+                   <div style={{ height: '200px', marginBottom: '32px' }}>
                      <CitationTimeline citationsPerYear={citedByData.citationsPerYear} />
                    </div>
                  )}
-                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                   <h5 className="md-title" style={{ fontSize: '14px' }}>Citing Papers</h5>
-                   <select className="md-select" style={{ width: '150px', padding: '4px 24px 4px 8px', fontSize: '12px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
+                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                   <h5 className="md-title">Citing Papers</h5>
+                   <select className="md-select" style={{ width: '150px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
                      <option value="relevance">Relevance</option>
                      <option value="newest">Newest</option>
                      <option value="oldest">Oldest</option>
@@ -531,12 +559,12 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                  </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                    {sortedCitingPapers.map((item, idx) => (
-                     <div key={idx} style={{ padding: '12px', backgroundColor: 'var(--md-surface-variant)', borderRadius: 'var(--md-border-radius-sm)' }}>
-                       <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 500, color: 'var(--md-primary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
+                     <div key={idx} style={{ padding: '16px', backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}>
+                       <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
                          {item.title}
                        </a>
-                       <p style={{ fontSize: '12px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
-                       <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.8 }}>{item.snippet}</div>
+                       <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
+                       <div style={{ fontSize: '13px', marginTop: '8px', color: 'var(--md-on-surface)' }}>{item.snippet}</div>
                      </div>
                    ))}
                    {sortedCitingPapers.length === 0 && <div className="md-body">No citing papers found.</div>}
@@ -560,7 +588,7 @@ function Avatar({ name, src, size = 'small' }) {
 function LinkButton({ href, icon, label }) {
   if (!href) return null;
   return (
-    <a className="md-btn md-btn-text" href={href} target="_blank" rel="noreferrer">
+    <a className="md-btn md-btn-text" href={href} target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'flex-start' }}>
       <span className="md-icon">{icon}</span> {label}
     </a>
   );

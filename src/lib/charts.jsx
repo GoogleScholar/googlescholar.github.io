@@ -1,84 +1,89 @@
+import { useMemo } from 'react';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { formatNumber, sortedYears } from './format.js';
 
-export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect }) {
-  const points = sortedYears(citationsPerYear);
+function CustomTooltip({ active, payload, label }) {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{
+        backgroundColor: 'var(--md-surface)',
+        border: '1px solid var(--md-outline-variant)',
+        borderRadius: 'var(--md-border-radius-sm)',
+        padding: '8px 12px',
+        boxShadow: 'var(--md-elevation-2)',
+        color: 'var(--md-on-surface)'
+      }}>
+        <p className="md-title" style={{ margin: 0, fontSize: '14px', marginBottom: '4px' }}>{label}</p>
+        <p className="md-body" style={{ margin: 0, color: 'var(--md-primary)', fontWeight: 600 }}>
+          {formatNumber(payload[0].value)} citations
+        </p>
+      </div>
+    );
+  }
+  return null;
+}
 
-  if (points.length === 0) {
-    return <div className="empty-chart">No yearly citation data</div>;
+export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect }) {
+  const data = useMemo(() => {
+    return sortedYears(citationsPerYear).map(point => ({
+      name: String(point.year),
+      citations: point.citations,
+      isSelected: String(point.year) === String(selectedYear)
+    }));
+  }, [citationsPerYear, selectedYear]);
+
+  if (data.length === 0) {
+    return <div className="empty-chart" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--md-on-surface-variant)' }}>No yearly citation data</div>;
   }
 
-  const width = 720;
-  const height = 220;
-  const padding = { top: 18, right: 22, bottom: 32, left: 44 };
-  const chartWidth = width - padding.left - padding.right;
-  const chartHeight = height - padding.top - padding.bottom;
-  const maxValue = Math.max(...points.map((point) => point.citations), 1);
-  const minYear = points[0].year;
-  const maxYear = points[points.length - 1].year;
-  const yearSpan = Math.max(maxYear - minYear, 1);
-
-  const coordinates = points.map((point) => {
-    const x = padding.left + ((point.year - minYear) / yearSpan) * chartWidth;
-    const y = padding.top + chartHeight - (point.citations / maxValue) * chartHeight;
-    return { ...point, x, y };
-  });
-
-  const path = coordinates
-    .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
-    .join(' ');
-
-  const areaPath = `${path} L ${coordinates[coordinates.length - 1].x.toFixed(2)} ${
-    padding.top + chartHeight
-  } L ${coordinates[0].x.toFixed(2)} ${padding.top + chartHeight} Z`;
-
-  const labels = coordinates.filter((_, index) => {
-    if (coordinates.length <= 8) {
-      return true;
-    }
-    return index === 0 || index === coordinates.length - 1 || index % 2 === 0;
-  });
+  // Find min/max for domain and padding
+  const maxCitations = Math.max(...data.map(d => d.citations));
 
   return (
-    <svg className="timeline-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Citations by year">
-      <line x1={padding.left} y1={padding.top + chartHeight} x2={width - padding.right} y2={padding.top + chartHeight} />
-      <line x1={padding.left} y1={padding.top} x2={padding.left} y2={padding.top + chartHeight} />
-      <text x={padding.left - 8} y={padding.top + 5} textAnchor="end">
-        {formatNumber(maxValue)}
-      </text>
-      <text x={padding.left - 8} y={padding.top + chartHeight + 5} textAnchor="end">
-        0
-      </text>
-      <path className="chart-area" d={areaPath} />
-      <path className="chart-line" d={path} />
-      {coordinates.map((point) => {
-        const isSelected = String(point.year) === String(selectedYear);
-        return (
-          <g 
-            key={point.year}
-            onClick={() => onYearSelect && onYearSelect(point.year)}
-            style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
-          >
-            <circle 
-              cx={point.x} 
-              cy={point.y} 
-              r={isSelected ? "6" : "4"} 
-              style={{
-                fill: isSelected ? 'var(--md-primary)' : 'var(--md-surface)',
-                strokeWidth: isSelected ? 3 : 2
-              }}
-            />
-            <title>
-              {point.year}: {formatNumber(point.citations)} citations
-            </title>
-          </g>
-        );
-      })}
-      {labels.map((point) => (
-        <text key={`label-${point.year}`} x={point.x} y={height - 9} textAnchor="middle">
-          {point.year}
-        </text>
-      ))}
-    </svg>
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart
+        data={data}
+        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+        onClick={(e) => {
+          if (e && e.activeLabel && onYearSelect) {
+            onYearSelect(e.activeLabel);
+          }
+        }}
+        style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
+      >
+        <defs>
+          <linearGradient id="colorCitations" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="var(--md-primary)" stopOpacity={0.3}/>
+            <stop offset="95%" stopColor="var(--md-primary)" stopOpacity={0}/>
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--md-outline-variant)" />
+        <XAxis 
+          dataKey="name" 
+          axisLine={false} 
+          tickLine={false} 
+          tick={{ fill: 'var(--md-on-surface-variant)', fontSize: 12 }} 
+          minTickGap={20}
+        />
+        <YAxis 
+          axisLine={false} 
+          tickLine={false} 
+          tick={{ fill: 'var(--md-on-surface-variant)', fontSize: 12 }} 
+          domain={[0, Math.ceil(maxCitations * 1.1)]}
+          tickFormatter={(value) => value >= 1000 ? `${(value/1000).toFixed(1)}k` : value}
+        />
+        <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--md-outline)', strokeWidth: 1, strokeDasharray: '4 4' }} />
+        <Area 
+          type="monotone" 
+          dataKey="citations" 
+          stroke="var(--md-primary)" 
+          strokeWidth={3}
+          fillOpacity={1} 
+          fill="url(#colorCitations)" 
+          activeDot={{ r: 6, fill: 'var(--md-primary)', stroke: 'var(--md-surface)', strokeWidth: 2 }}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
   );
 }
 
