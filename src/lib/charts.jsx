@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { formatNumber, sortedYears } from './format.js';
 
 function CustomTooltip({ active, payload, label }) {
@@ -36,12 +36,11 @@ export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect 
     return <div className="empty-chart" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--md-on-surface-variant)' }}>No yearly citation data</div>;
   }
 
-  // Find min/max for domain and padding
   const maxCitations = Math.max(...data.map(d => d.citations));
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
+      <BarChart
         data={data}
         margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
         onClick={(e) => {
@@ -51,12 +50,6 @@ export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect 
         }}
         style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
       >
-        <defs>
-          <linearGradient id="colorCitations" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="var(--md-primary)" stopOpacity={0.3}/>
-            <stop offset="95%" stopColor="var(--md-primary)" stopOpacity={0}/>
-          </linearGradient>
-        </defs>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--md-outline-variant)" />
         <XAxis 
           dataKey="name" 
@@ -72,17 +65,13 @@ export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect 
           domain={[0, Math.ceil(maxCitations * 1.1)]}
           tickFormatter={(value) => value >= 1000 ? `${(value/1000).toFixed(1)}k` : value}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--md-outline)', strokeWidth: 1, strokeDasharray: '4 4' }} />
-        <Area 
-          type="monotone" 
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--md-surface-variant)', opacity: 0.5 }} />
+        <Bar 
           dataKey="citations" 
-          stroke="var(--md-primary)" 
-          strokeWidth={3}
-          fillOpacity={1} 
-          fill="url(#colorCitations)" 
-          activeDot={{ r: 6, fill: 'var(--md-primary)', stroke: 'var(--md-surface)', strokeWidth: 2 }}
+          fill="var(--md-primary)" 
+          radius={[4, 4, 0, 0]}
         />
-      </AreaChart>
+      </BarChart>
     </ResponsiveContainer>
   );
 }

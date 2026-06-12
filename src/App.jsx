@@ -229,51 +229,59 @@ export default function App() {
             metrics={metrics}
           />
 
-          {metrics.citationsPerYear && Object.keys(metrics.citationsPerYear).length > 0 && (
-            <div className="md-card" style={{ marginBottom: '32px' }}>
-              <div className="md-card-header" style={{ marginBottom: '16px' }}>
-                <h2 className="md-headline">Citations by year</h2>
+          <div className="md-content-grid">
+            <aside className="md-sidebar">
+              <div className="md-input-wrapper">
+                <span className="md-icon">search</span>
+                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
               </div>
-              <div style={{ height: '200px' }}>
-                <CitationTimeline 
-                  citationsPerYear={metrics.citationsPerYear}
-                  selectedYear={yearFilter}
-                  onYearSelect={(year) => setYearFilter(String(year))}
-                />
+
+              <div className="md-input-group">
+                <label className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Filter by Year</label>
+                <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)}>
+                  <option value="all">All years</option>
+                  {years.map(year => <option key={year} value={year}>{year}</option>)}
+                </select>
               </div>
-            </div>
-          )}
 
-          <div className="md-toolbar">
-            <div className="md-input-wrapper">
-              <span className="md-icon">search</span>
-              <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
-            </div>
+              <div className="md-input-group">
+                <label className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Sort</label>
+                <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                  {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                </select>
+              </div>
 
-            <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} style={{ width: '160px' }}>
-              <option value="all">All years</option>
-              {years.map(year => <option key={year} value={year}>{year}</option>)}
-            </select>
+              {metrics.citationsPerYear && Object.keys(metrics.citationsPerYear).length > 0 && (
+                <div className="md-card" style={{ marginTop: '16px', padding: '16px' }}>
+                  <h3 className="md-title" style={{ marginBottom: '16px', fontSize: '14px' }}>Citations by year</h3>
+                  <div style={{ height: '150px' }}>
+                    <CitationTimeline 
+                      citationsPerYear={metrics.citationsPerYear}
+                      selectedYear={yearFilter}
+                      onYearSelect={(year) => setYearFilter(String(year))}
+                    />
+                  </div>
+                </div>
+              )}
+            </aside>
 
-            <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ width: '160px' }}>
-              {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-            </select>
-          </div>
+            <main>
+              <div style={{ marginBottom: '16px' }}>
+                <h2 className="md-headline">Publications</h2>
+                <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Showing {formatNumber(filteredPublications.length)} papers</p>
+              </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <h2 className="md-headline">Publications</h2>
-            <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Showing {formatNumber(filteredPublications.length)} papers</p>
-          </div>
-
-          <div>
-            {filteredPublications.map((publication) => (
-              <PaperCard
-                key={publication.id}
-                publication={publication}
-                isExpanded={publication.id === expandedId}
-                onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
-              />
-            ))}
+              <div>
+                {filteredPublications.map((publication) => (
+                  <PaperCard
+                    key={publication.id}
+                    publication={publication}
+                    isExpanded={publication.id === expandedId}
+                    onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
+                  />
+                ))}
+              </div>
+            </main>
           </div>
         </div>
       )}
@@ -519,16 +527,18 @@ function PaperCard({ publication, isExpanded, onToggle }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
           <div style={{ minWidth: 0, position: 'relative' }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>BibTeX</span>
-            <pre>{publication.bibtex || 'No BibTeX available'}</pre>
-            <button className="md-btn md-btn-text" style={{ position: 'absolute', top: '24px', right: '8px', padding: '4px 8px', fontSize: '12px' }} onClick={copyBibtex} disabled={!publication.bibtex}>
-              <span className="md-icon" style={{ fontSize: '16px' }}>{copied ? 'check' : 'content_copy'}</span>
-              {copied ? 'Copied' : 'Copy'}
-            </button>
+            <div className="md-bibtex-container">
+              <pre>{publication.bibtex || 'No BibTeX available'}</pre>
+              <button className="md-bibtex-copy" onClick={copyBibtex} disabled={!publication.bibtex} title="Copy BibTeX">
+                <span className="md-icon" style={{ fontSize: '14px' }}>{copied ? 'check' : 'content_copy'}</span>
+                {copied ? 'Copied' : 'Copy'}
+              </button>
+            </div>
           </div>
           
           <div style={{ minWidth: 0 }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Links</span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'center' }}>
               <LinkButton href={publication.links.scholar} icon="school" label="View on Google Scholar" />
               <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
               <LinkButton href={publication.links.citedBy} icon="format_quote" label="View Citing Papers" />
@@ -570,15 +580,29 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                    </select>
                  </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                   {sortedCitingPapers.map((item, idx) => (
+                   {sortedCitingPapers.map((item, idx) => {
+                     const itemAuthorCount = item.authors ? item.authors.split(/,|\band\b/i).length : 0;
+                     return (
                      <div key={idx} style={{ padding: '16px', backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}>
                        <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
                          {item.title}
                        </a>
                        <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
-                       <div style={{ fontSize: '13px', marginTop: '8px', color: 'var(--md-on-surface)' }}>{item.snippet}</div>
+                       <div className="md-chip-group" style={{ marginTop: '12px' }}>
+                         <span className="md-chip">{item.year || 'n.d.'}</span>
+                         <span className="md-chip">
+                           <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
+                           {formatNumber(item.citations || 0)} citations
+                         </span>
+                         <span className="md-chip">
+                           <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
+                           {itemAuthorCount} author{itemAuthorCount !== 1 ? 's' : ''}
+                         </span>
+                       </div>
+                       <div style={{ fontSize: '13px', marginTop: '12px', color: 'var(--md-on-surface)' }}>{item.snippet}</div>
                      </div>
-                   ))}
+                     );
+                   })}
                    {sortedCitingPapers.length === 0 && <div className="md-body">No citing papers found.</div>}
                  </div>
                </>
@@ -600,8 +624,8 @@ function Avatar({ name, src, size = 'small' }) {
 function LinkButton({ href, icon, label }) {
   if (!href) return null;
   return (
-    <a className="md-btn md-btn-text" href={href} target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'flex-start' }}>
-      <span className="md-icon">{icon}</span> {label}
+    <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={label} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }}>
+      <span className="md-icon">{icon}</span>
     </a>
   );
 }

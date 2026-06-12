@@ -186,39 +186,31 @@ html, body {
 
 /* Modern Centered Layout */
 .md-layout {
-  display: flex;
-  flex-direction: column;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   padding: 32px 24px;
 }
 
-/* Sticky Toolbar for Filters */
-.md-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background-color: color-mix(in srgb, var(--md-surface) 90%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--md-border-radius-lg);
-  border: 1px solid var(--md-outline-variant);
-  box-shadow: var(--md-elevation-1);
-  position: sticky;
-  top: 60px; /* Below the app bar */
-  z-index: 90;
-  margin-bottom: 24px;
+.md-content-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
-@media (max-width: 600px) {
-  .md-toolbar {
-    flex-wrap: wrap;
+@media (max-width: 900px) {
+  .md-content-grid {
+    grid-template-columns: 1fr;
   }
-  .md-toolbar > * {
-    flex: 1 1 100%;
-  }
+}
+
+.md-sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* Input Fields */
@@ -226,7 +218,7 @@ html, body {
   position: relative;
   display: flex;
   align-items: center;
-  flex: 1;
+  width: 100%;
 }
 .md-input-wrapper .md-icon {
   position: absolute;
@@ -258,6 +250,7 @@ html, body {
 }
 
 .md-select {
+  width: 100%;
   padding: 10px 36px 10px 14px;
   border: 1px solid var(--md-outline);
   border-radius: var(--md-border-radius-md);
