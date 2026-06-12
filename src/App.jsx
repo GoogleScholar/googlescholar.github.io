@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CitationTimeline } from './lib/charts.jsx';
-import { formatNumber, getPublicationYearRange, getSourceLabel, truncateText } from './lib/format.js';
+import { formatNumber, getPublicationYearRange, truncateText } from './lib/format.js';
 import { normalizeScholarPayload } from './lib/scholarData.js';
 
 const SORT_OPTIONS = [
@@ -10,25 +10,52 @@ const SORT_OPTIONS = [
   { value: 'title', label: 'Title' }
 ];
 
-const DEFAULT_DATA_URL = `${import.meta.env.BASE_URL}data/scholar.json`;
-const SCHOLARS_URL = `${import.meta.env.BASE_URL}data/scholars.json`;
+const BACKEND_URL = 'https://backend-3aen.onrender.com';
 
-function getInitialDataUrl() {
+function getInitialUserId() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('data') || DEFAULT_DATA_URL;
+  return params.get('user') || '';
+}
+
+function getRecentProfiles() {
+  try {
+    const data = localStorage.getItem('scholar_recent_profiles');
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentProfile(profile) {
+  try {
+    let recent = getRecentProfiles();
+    recent = recent.filter(p => p.user !== profile.user);
+    recent.unshift(profile);
+    if (recent.length > 5) recent = recent.slice(0, 5);
+    localStorage.setItem('scholar_recent_profiles', JSON.stringify(recent));
+  } catch (e) {
+    console.error('Failed to save recent profile', e);
+  }
 }
 
 export default function App() {
-  const [dataUrl, setDataUrl] = useState(getInitialDataUrl);
+  const [userId, setUserId] = useState(getInitialUserId);
   const [data, setData] = useState(null);
-  const [scholars, setScholars] = useState([]);
-  const [status, setStatus] = useState({ loading: true, error: '' });
+  const [status, setStatus] = useState({ loading: false, error: '' });
+  
   const [query, setQuery] = useState('');
-  const [nameQuery, setNameQuery] = useState('');
   const [sortBy, setSortBy] = useState('citations');
   const [yearFilter, setYearFilter] = useState('all');
   const [expandedId, setExpandedId] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setUserId(getInitialUserId());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     if (darkMode) {
@@ -40,43 +67,35 @@ export default function App() {
 
   useEffect(() => {
     let isMounted = true;
-    fetch(SCHOLARS_URL, { headers: { Accept: 'application/json' } })
-      .then((response) => (response.ok ? response.json() : []))
-      .then((payload) => {
-        if (isMounted && Array.isArray(payload)) {
-          setScholars(payload);
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setScholars([]);
-        }
-      });
-    return () => { isMounted = false; };
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-    const selectedScholar = scholars.find((scholar) => sameUrl(scholar.dataUrl, dataUrl));
+    
+    if (!userId) {
+      setData(null);
+      setStatus({ loading: false, error: '' });
+      return;
+    }
 
     async function loadData() {
       setStatus({ loading: true, error: '' });
       try {
-        const response = await fetch(resolveDataUrl(dataUrl), {
+        const response = await fetch(`${BACKEND_URL}/profile?user=${encodeURIComponent(userId)}`, {
           headers: { Accept: 'application/json' }
         });
+        
         if (!response.ok) {
           throw new Error(`Scholar data request failed with ${response.status}`);
         }
 
         const payload = await response.json();
+        
+        if (payload.error) {
+           throw new Error(payload.error);
+        }
+
         const nextData = normalizeScholarPayload(payload, {
-          profileName: selectedScholar?.name,
-          affiliation: selectedScholar?.affiliation,
-          avatarUrl: selectedScholar?.avatarUrl,
-          user: selectedScholar?.user,
-          url: dataUrl
+          user: userId,
+          url: `${BACKEND_URL}/profile?user=${userId}`
         });
+        
         const defaultPublication = [...nextData.publications].sort(
           (a, b) => b.citations - a.citations || b.year - a.year
         )[0];
@@ -85,6 +104,13 @@ export default function App() {
           setData(nextData);
           setExpandedId(defaultPublication?.id || '');
           setStatus({ loading: false, error: '' });
+          
+          saveRecentProfile({
+            user: userId,
+            name: nextData.source.profileName || 'Unknown Scholar',
+            affiliation: nextData.source.affiliation || '',
+            avatarUrl: nextData.source.avatarUrl || ''
+          });
         }
       } catch (error) {
         if (isMounted) {
@@ -95,46 +121,31 @@ export default function App() {
 
     loadData();
     return () => { isMounted = false; };
-  }, [dataUrl, scholars]);
+  }, [userId]);
+
+  function navigateToUser(id) {
+    if (!id || id.trim() === '') return;
+    const cleanId = id.trim();
+    const url = new URL(window.location.href);
+    url.searchParams.set('user', cleanId);
+    window.history.pushState(null, '', url);
+    setUserId(cleanId);
+  }
+
+  function goHome(e) {
+    e.preventDefault();
+    const url = new URL(window.location.href);
+    url.searchParams.delete('user');
+    window.history.pushState(null, '', url);
+    setUserId('');
+  }
 
   const publications = data?.publications || [];
-  const activeScholar = useMemo(() => {
-    const matched = scholars.find((scholar) => sameUrl(scholar.dataUrl, dataUrl));
-    if (matched) return matched;
-    return {
-      name: data?.source?.profileName,
-      affiliation: data?.source?.affiliation,
-      avatarUrl: data?.source?.avatarUrl,
-      dataUrl
-    };
-  }, [data, dataUrl, scholars]);
-
+  
   const years = useMemo(() => {
     return [...new Set(publications.map((p) => p.year).filter(Boolean))]
       .sort((a, b) => b - a).map(String);
   }, [publications]);
-
-  const coauthors = useMemo(() => {
-    const counts = new Map();
-    for (const publication of publications) {
-      for (const author of splitAuthors(publication.authors)) {
-        counts.set(author, (counts.get(author) || 0) + 1);
-      }
-    }
-    return [...counts.entries()]
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-  }, [publications]);
-
-  const nameMatches = useMemo(() => {
-    const normalized = normalizeSearch(nameQuery);
-    const profileMatches = scholars.filter((scholar) => {
-      if (!normalized) return true;
-      return normalizeSearch([scholar.name, scholar.affiliation, scholar.user].join(' ')).includes(normalized);
-    }).slice(0, 5);
-    const authorMatches = coauthors.filter((author) => !normalized || normalizeSearch(author.name).includes(normalized)).slice(0, 8);
-    return { profiles: profileMatches, authors: authorMatches };
-  }, [coauthors, nameQuery, scholars]);
 
   const filteredPublications = useMemo(() => {
     const normalizedQuery = normalizeSearch(query);
@@ -155,9 +166,9 @@ export default function App() {
 
   const metrics = data?.metrics || {};
   const totalPaperCitations = publications.reduce((sum, publication) => sum + publication.citations, 0);
-  const profileName = data?.source?.profileName || activeScholar?.name || 'Scholar profile';
-  const affiliation = data?.source?.affiliation || activeScholar?.affiliation || 'Google Scholar DOM data';
-  const avatarUrl = data?.source?.avatarUrl || activeScholar?.avatarUrl || '';
+  const profileName = data?.source?.profileName || 'Scholar profile';
+  const affiliation = data?.source?.affiliation || '';
+  const avatarUrl = data?.source?.avatarUrl || '';
   const hasFilters = query || yearFilter !== 'all' || sortBy !== 'citations';
 
   function resetFilters() {
@@ -166,18 +177,10 @@ export default function App() {
     setSortBy('citations');
   }
 
-  function selectScholar(scholar) {
-    setDataUrl(scholar.dataUrl);
-    setNameQuery(scholar.name);
-    const url = new URL(window.location.href);
-    url.searchParams.delete('data');
-    window.history.replaceState(null, '', url);
-  }
-
   return (
     <>
       <header className="md-app-bar">
-        <a className="brand" href="/">
+        <a className="brand" href="/" onClick={goHome}>
           <span className="md-icon" style={{ color: 'var(--md-primary)' }}>school</span>
           <span className="md-title">Scholar Pages</span>
         </a>
@@ -191,39 +194,35 @@ export default function App() {
         </div>
       </header>
 
-      {status.loading && !data && (
+      {!userId && <LandingPage onNavigate={navigateToUser} />}
+
+      {userId && status.loading && (
         <div className="md-state-panel">
           <span className="md-icon" style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 1s linear infinite' }}>refresh</span>
-          <h2 className="md-headline">Loading Scholar directory</h2>
+          <h2 className="md-headline">Fetching Profile...</h2>
+          <p className="md-body">Querying Google Scholar for {userId}</p>
         </div>
       )}
 
-      {status.error && !data && (
+      {userId && status.error && (
         <div className="md-state-panel">
           <span className="md-icon" style={{ fontSize: '48px', color: 'var(--md-error)', marginBottom: '16px' }}>error</span>
-          <h2 className="md-headline" style={{ color: 'var(--md-error)' }}>Unable to load Scholar data</h2>
-          <p className="md-body">{status.error}</p>
+          <h2 className="md-headline" style={{ color: 'var(--md-error)' }}>Unable to load Scholar profile</h2>
+          <p className="md-body" style={{ maxWidth: '400px', marginTop: '8px' }}>{status.error}</p>
+          <button className="md-btn md-btn-primary" style={{ marginTop: '24px' }} onClick={() => navigateToUser(userId)}>
+            Try Again
+          </button>
         </div>
       )}
 
-      {!status.loading && !status.error && data && (
+      {userId && !status.loading && !status.error && data && (
         <div className="md-layout">
           <aside className="md-sidebar">
-            <ScholarSearch
-              value={nameQuery}
-              onChange={setNameQuery}
-              matches={nameMatches}
-              onScholarSelect={selectScholar}
-              onAuthorSelect={(name) => { setQuery(name); setNameQuery(name); }}
-            />
-            
-            <hr className="md-divider" />
-
             <div className="md-input-group">
               <label className="md-input-label">Search papers</label>
               <div className="md-input-wrapper">
                 <span className="md-icon">search</span>
-                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search papers..." />
+                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
               </div>
             </div>
 
@@ -257,14 +256,16 @@ export default function App() {
               totalPaperCitations={totalPaperCitations}
             />
 
-            <div className="md-card" style={{ marginBottom: '32px' }}>
-              <div className="md-card-header" style={{ marginBottom: '16px' }}>
-                <h2 className="md-headline">Citations by year</h2>
+            {metrics.citationsPerYear && Object.keys(metrics.citationsPerYear).length > 0 && (
+              <div className="md-card" style={{ marginBottom: '32px' }}>
+                <div className="md-card-header" style={{ marginBottom: '16px' }}>
+                  <h2 className="md-headline">Citations by year</h2>
+                </div>
+                <div style={{ height: '150px' }}>
+                  <CitationTimeline citationsPerYear={metrics.citationsPerYear} />
+                </div>
               </div>
-              <div style={{ height: '150px' }}>
-                <CitationTimeline citationsPerYear={metrics.citationsPerYear} />
-              </div>
-            </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
               <div>
@@ -290,49 +291,64 @@ export default function App() {
   );
 }
 
-function ScholarSearch({ value, onChange, matches, onScholarSelect, onAuthorSelect }) {
-  const hasQuery = value.trim().length > 0;
-  const showProfiles = hasQuery || matches.profiles.length > 1;
+function LandingPage({ onNavigate }) {
+  const [input, setInput] = useState('');
+  const recentProfiles = getRecentProfiles();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (input.trim()) onNavigate(input.trim());
+  }
 
   return (
-    <div className="md-input-group">
-      <label className="md-input-label">Find scholar or author</label>
-      <div className="md-input-wrapper">
-        <span className="md-icon">person_search</span>
-        <input className="md-input" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder="Search for a name..." />
-      </div>
-      
-      <div style={{ marginTop: '8px' }}>
-        {showProfiles && matches.profiles.length > 0 && (
-          <div style={{ marginBottom: '16px' }}>
-            <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Profiles</span>
-            {matches.profiles.map((scholar) => (
-              <button key={scholar.dataUrl} className="md-list-item" onClick={() => onScholarSelect(scholar)}>
-                <Avatar name={scholar.name} src={scholar.avatarUrl} />
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <strong className="md-body">{scholar.name}</strong>
-                  <small style={{ fontSize: '12px', color: 'var(--md-on-surface-variant)' }}>{truncateText(scholar.affiliation, 48)}</small>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
+    <div className="md-landing-container">
+      <div className="md-landing-hero">
+        <h1 className="md-display" style={{ marginBottom: '16px', color: 'var(--md-primary)' }}>Analyze any Scholar Profile</h1>
+        <p className="md-body" style={{ fontSize: '18px', color: 'var(--md-on-surface-variant)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
+          Instantly fetch, sort, and analyze publications and citations. 
+          Enter a Google Scholar ID below to get started.
+        </p>
 
-        {hasQuery && matches.authors.length > 0 && (
-          <div>
-            <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Authors in papers</span>
-            {matches.authors.map((author) => (
-              <button key={author.name} className="md-list-item" onClick={() => onAuthorSelect(author.name)} style={{ padding: '8px' }}>
-                <span className="md-icon" style={{ color: 'var(--md-on-surface-variant)' }}>group</span>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <strong className="md-body">{author.name}</strong>
-                  <small style={{ fontSize: '12px', color: 'var(--md-on-surface-variant)' }}>{author.count} papers</small>
-                </div>
-              </button>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto', display: 'flex', gap: '12px' }}>
+          <div className="md-input-wrapper" style={{ flex: 1 }}>
+            <span className="md-icon">person</span>
+            <input 
+              className="md-input" 
+              type="text" 
+              value={input} 
+              onChange={e => setInput(e.target.value)} 
+              placeholder="e.g. vJjq9LwAAAAJ" 
+              required
+            />
+          </div>
+          <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '16px' }}>
+            Analyze
+          </button>
+        </form>
+      </div>
+
+      {recentProfiles.length > 0 && (
+        <div className="md-recent-profiles">
+          <h2 className="md-title" style={{ marginBottom: '24px', textAlign: 'center' }}>Recent Profiles</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', maxWidth: '1000px', margin: '0 auto' }}>
+            {recentProfiles.map(profile => (
+              <div 
+                key={profile.user} 
+                className="md-card" 
+                style={{ marginBottom: '0', alignItems: 'center', textAlign: 'center', padding: '24px 16px' }}
+                onClick={() => onNavigate(profile.user)}
+              >
+                <Avatar name={profile.name} src={profile.avatarUrl} size="large" />
+                <h3 className="md-title" style={{ marginTop: '12px', marginBottom: '4px' }}>{profile.name}</h3>
+                <p className="md-body" style={{ fontSize: '14px', color: 'var(--md-on-surface-variant)' }}>
+                  {truncateText(profile.affiliation, 60)}
+                </p>
+                <span className="md-chip" style={{ marginTop: '16px' }}>{profile.user}</span>
+              </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -442,19 +458,6 @@ function LinkButton({ href, icon, label }) {
   );
 }
 
-function splitAuthors(authors) {
-  return String(authors || '').split(/,|\band\b/i).map((author) => author.trim()).filter(Boolean);
-}
-
 function normalizeSearch(value) {
   return String(value || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
-}
-
-function resolveDataUrl(url) {
-  return new URL(url || DEFAULT_DATA_URL, window.location.href).toString();
-}
-
-function sameUrl(left, right) {
-  if (!left || !right) return false;
-  return resolveDataUrl(left) === resolveDataUrl(right);
 }

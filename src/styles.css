@@ -555,3 +555,23 @@ pre {
   text-align: center;
   color: var(--md-on-surface-variant);
 }
+
+/* Landing Page */
+.md-landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 24px;
+  flex: 1;
+}
+
+.md-landing-hero {
+  text-align: center;
+  margin-bottom: 64px;
+  width: 100%;
+}
+
+.md-recent-profiles {
+  width: 100%;
+}
+
