@@ -220,18 +220,15 @@ export default function App() {
             <hr className="md-divider" />
 
             <div className="md-input-group">
-              <label className="md-input-label">
-                <span className="md-icon" style={{ fontSize: '18px' }}>search</span>
-                Search papers
-              </label>
-              <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search papers..." />
+              <label className="md-input-label">Search papers</label>
+              <div className="md-input-wrapper">
+                <span className="md-icon">search</span>
+                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search papers..." />
+              </div>
             </div>
 
             <div className="md-input-group">
-              <label className="md-input-label">
-                <span className="md-icon" style={{ fontSize: '18px' }}>calendar_month</span>
-                Year
-              </label>
+              <label className="md-input-label">Year</label>
               <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)}>
                 <option value="all">All years</option>
                 {years.map(year => <option key={year} value={year}>{year}</option>)}
@@ -239,10 +236,7 @@ export default function App() {
             </div>
 
             <div className="md-input-group">
-              <label className="md-input-label">
-                <span className="md-icon" style={{ fontSize: '18px' }}>sort</span>
-                Sort
-              </label>
+              <label className="md-input-label">Sort</label>
               <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                 {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select>
@@ -302,11 +296,11 @@ function ScholarSearch({ value, onChange, matches, onScholarSelect, onAuthorSele
 
   return (
     <div className="md-input-group">
-      <label className="md-input-label">
-        <span className="md-icon" style={{ fontSize: '18px' }}>person_search</span>
-        Find scholar or author
-      </label>
-      <input className="md-input" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder="Search for a name..." />
+      <label className="md-input-label">Find scholar or author</label>
+      <div className="md-input-wrapper">
+        <span className="md-icon">person_search</span>
+        <input className="md-input" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder="Search for a name..." />
+      </div>
       
       <div style={{ marginTop: '8px' }}>
         {showProfiles && matches.profiles.length > 0 && (
