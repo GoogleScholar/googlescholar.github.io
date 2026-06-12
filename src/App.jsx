@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CitationTimeline } from './lib/charts.jsx';
-import { formatNumber, getPublicationYearRange, truncateText } from './lib/format.js';
+import { YearRangeFilter } from './lib/YearRangeFilter.jsx';
+import { formatNumber, getPublicationYearRange, truncateText, normalizeYear } from './lib/format.js';
 import { normalizeScholarPayload } from './lib/scholarData.js';
 
 const SORT_OPTIONS = [
-  { value: 'citations', label: 'Most cited' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'oldest', label: 'Oldest' },
-  { value: 'title', label: 'Title' }
+  { value: 'citations', label: 'Most Cited' },
+  { value: 'trending', label: 'Trending (Citations/Year)' },
+  { value: 'newest', label: 'Newest First' },
+  { value: 'oldest', label: 'Oldest First' },
+  { value: 'title', label: 'Title (A-Z)' }
 ];
 
-const BACKEND_URL = 'https://backend-3aen.onrender.com';
+const BACKEND_URL = 'http://localhost:3000';
 
 function getInitialUserId() {
   const params = new URLSearchParams(window.location.search);
@@ -53,8 +53,8 @@ export default function App() {
   const [status, setStatus] = useState({ loading: false, error: '' });
   
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('citations');
-  const [yearFilter, setYearFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('trending');
+  const [yearRange, setYearRange] = useState([]);
   const [expandedId, setExpandedId] = useState('');
   const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 
@@ -161,7 +161,16 @@ export default function App() {
     const filtered = publications.filter((publication) => {
       const matchesQuery = normalizedQuery === '' ||
         normalizeSearch([publication.title, publication.authors, publication.venue].join(' ')).includes(normalizedQuery);
-      const matchesYear = yearFilter === 'all' || String(publication.year) === yearFilter;
+      
+      let matchesYear = true;
+      if (yearRange.length === 2) {
+        const pubYear = normalizeYear(publication.year);
+        if (pubYear === null) {
+          matchesYear = false;
+        } else {
+          matchesYear = pubYear >= yearRange[0] && pubYear <= yearRange[1];
+        }
+      }
       return matchesQuery && matchesYear;
     });
 
@@ -171,7 +180,7 @@ export default function App() {
       if (sortBy === 'title') return a.title.localeCompare(b.title);
       return b.citations - a.citations || b.year - a.year;
     });
-  }, [publications, query, sortBy, yearFilter]);
+  }, [publications, query, sortBy, yearRange]);
 
   const metrics = data?.metrics || {};
   const profileName = data?.source?.profileName || 'Scholar profile';
@@ -195,8 +204,18 @@ export default function App() {
           >
             <span className="md-icon">{darkMode ? 'light_mode' : 'dark_mode'}</span>
           </button>
-          <a className="md-btn-text" href="https://github.com/GoogleScholar/googlescholar.github.io" target="_blank" rel="noreferrer">
-            GitHub
+          <a 
+            className="md-btn-icon" 
+            href="https://github.com/GoogleScholar/googlescholar.github.io" 
+            target="_blank" 
+            rel="noreferrer"
+            aria-label="GitHub Repository"
+            title="GitHub Repository"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit' }}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
           </a>
         </div>
       </header>
@@ -238,13 +257,11 @@ export default function App() {
                 <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
               </div>
 
-              <div className="md-input-group">
-                <label className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Filter by Year</label>
-                <select className="md-select" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)}>
-                  <option value="all">All years</option>
-                  {years.map(year => <option key={year} value={year}>{year}</option>)}
-                </select>
-              </div>
+              <YearRangeFilter 
+                publications={publications} 
+                yearRange={yearRange} 
+                onChange={setYearRange} 
+              />
 
               <div className="md-input-group">
                 <label className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Sort</label>
@@ -259,8 +276,8 @@ export default function App() {
                   <div style={{ height: '150px' }}>
                     <CitationTimeline 
                       citationsPerYear={metrics.citationsPerYear}
-                      selectedYear={yearFilter}
-                      onYearSelect={(year) => setYearFilter(String(year))}
+                      selectedYear={yearRange.length === 2 && yearRange[0] === yearRange[1] ? String(yearRange[0]) : 'all'}
+                      onYearSelect={(year) => setYearRange([year, year])}
                     />
                   </div>
                 </div>
@@ -401,14 +418,42 @@ function PaperCard({ publication, isExpanded, onToggle }) {
   const [citedByData, setCitedByData] = useState(null);
   const [citedByLoading, setCitedByLoading] = useState(false);
   const [citedByError, setCitedByError] = useState('');
-  const [showCitationAnalysis, setShowCitationAnalysis] = useState(false);
-  const [citedBySort, setCitedBySort] = useState('relevance');
+  const [citedBySort, setCitedBySort] = useState('trending');
+
+  useEffect(() => {
+    if (isExpanded && publication.citations > 0 && !citedByData && !citedByLoading && publication.links.citedBy) {
+      const load = async () => {
+        setCitedByLoading(true);
+        try {
+          const response = await fetch(`${BACKEND_URL}/cited-by?url=${encodeURIComponent(publication.links.citedBy)}&limit=100`);
+          if (!response.ok) throw new Error('Failed to load citations');
+          const data = await response.json();
+          
+          const years = {};
+          data.items.forEach(item => {
+            if (item.year) {
+               years[item.year] = (years[item.year] || 0) + 1;
+            }
+          });
+          data.citationsPerYear = years;
+          setCitedByData(data);
+        } catch (e) {
+          setCitedByError(e.message);
+        } finally {
+          setCitedByLoading(false);
+        }
+      };
+      load();
+    }
+  }, [isExpanded, publication.citations, citedByData, citedByLoading, publication.links.citedBy]);
 
   const sortedCitingPapers = useMemo(() => {
     if (!citedByData?.items) return [];
     let items = [...citedByData.items];
     if (citedBySort === 'newest') {
       items.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+    } else if (citedBySort === 'trending') {
+      items.sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0));
     } else if (citedBySort === 'oldest') {
       items.sort((a, b) => (Number(a.year) || 9999) - (Number(b.year) || 9999));
     } else if (citedBySort === 'title') {
@@ -452,44 +497,9 @@ function PaperCard({ publication, isExpanded, onToggle }) {
     window.setTimeout(() => setCopied(false), 1400);
   }
 
-  async function loadCitations(event) {
-    event.stopPropagation();
-    
-    if (showCitationAnalysis) {
-      setShowCitationAnalysis(false);
-      return;
-    }
-    
-    setShowCitationAnalysis(true);
-    if (!isExpanded) onToggle();
-    
-    if (citedByData || citedByLoading || !publication.links.citedBy) return;
-    
-    setCitedByLoading(true);
-    try {
-      const response = await fetch(`${BACKEND_URL}/cited-by?url=${encodeURIComponent(publication.links.citedBy)}&limit=100`);
-      if (!response.ok) throw new Error('Failed to load citations');
-      const data = await response.json();
-      
-      const years = {};
-      data.items.forEach(item => {
-        if (item.year) {
-           years[item.year] = (years[item.year] || 0) + 1;
-        }
-      });
-      data.citationsPerYear = years;
-      
-      setCitedByData(data);
-    } catch (e) {
-      setCitedByError(e.message);
-    } finally {
-      setCitedByLoading(false);
-    }
-  }
-
   return (
-    <div className={`md-card ${isExpanded ? 'expanded' : ''}`}>
-      <div className="md-card-header" onClick={onToggle} style={{ cursor: 'pointer' }}>
+    <div className={`md-card ${isExpanded && publication.citations > 0 ? 'expanded' : ''}`}>
+      <div className="md-card-header" onClick={publication.citations > 0 ? onToggle : undefined} style={{ cursor: publication.citations > 0 ? 'pointer' : 'default' }}>
         <div style={{ flex: 1 }}>
           <h3 className="md-title md-card-title">{publication.title}</h3>
           <p className="md-card-subtitle">{publication.authors}</p>
@@ -497,16 +507,10 @@ function PaperCard({ publication, isExpanded, onToggle }) {
           
           <div className="md-chip-group" style={{ marginTop: '12px' }}>
             <span className="md-chip">{publication.year || 'n.d.'}</span>
-            <button 
-              className="md-chip" 
-              style={{ cursor: publication.citations > 0 ? 'pointer' : 'default', border: showCitationAnalysis ? '1px solid var(--md-primary)' : '1px solid transparent' }}
-              onClick={publication.citations > 0 ? loadCitations : undefined}
-              disabled={publication.citations === 0}
-              title="Click to analyze citations"
-            >
+            <span className="md-chip">
               <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
               {formatNumber(publication.citations)} citations
-            </button>
+            </span>
             <span className="md-chip">
               <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
               {authorCount} author{authorCount !== 1 ? 's' : ''}
@@ -514,38 +518,36 @@ function PaperCard({ publication, isExpanded, onToggle }) {
             <span style={{ width: '8px' }}></span>
             <LinkButton href={publication.links.scholar} icon="school" label="View on Google Scholar" />
             <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
+            
+            <button 
+              className="md-chip" 
+              onClick={copyBibtex} 
+              disabled={!publication.bibtex}
+              title="Copy BibTeX"
+              style={{ cursor: publication.bibtex ? 'pointer' : 'default', backgroundColor: copied ? 'var(--md-primary)' : '', color: copied ? 'var(--md-on-primary)' : '', border: 'none' }}
+            >
+              <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>{copied ? 'check' : 'content_copy'}</span>
+              {copied ? 'Copied' : 'BibTeX'}
+            </button>
           </div>
         </div>
         
-        <button 
-          className="md-btn-icon" 
-          onClick={onToggle}
-          aria-expanded={isExpanded}
-          aria-label={isExpanded ? "Collapse paper details" : "Expand paper details"}
-          title={isExpanded ? "Collapse" : "Expand"}
-        >
-          <span className="md-icon" aria-hidden="true">{isExpanded ? 'expand_less' : 'expand_more'}</span>
-        </button>
+        {publication.citations > 0 && (
+          <button 
+            className="md-btn-icon" 
+            onClick={(e) => { e.stopPropagation(); onToggle(); }}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? "Collapse paper details" : "Expand paper details"}
+            title={isExpanded ? "Collapse" : "Expand"}
+          >
+            <span className="md-icon" aria-hidden="true">{isExpanded ? 'expand_less' : 'expand_more'}</span>
+          </button>
+        )}
       </div>
 
-      <div className="md-card-details" onClick={(e) => e.stopPropagation()}>
-        <div style={{ display: 'block', marginBottom: '24px' }}>
-          <div style={{ position: 'relative' }}>
-            <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>BibTeX</span>
-            <div className="md-bibtex-container">
-              <SyntaxHighlighter language="latex" style={vscDarkPlus} customStyle={{ margin: 0, padding: '16px', fontSize: '13px', backgroundColor: 'transparent' }} wrapLines={true} wrapLongLines={true}>
-                {publication.bibtex || 'No BibTeX available'}
-              </SyntaxHighlighter>
-              <button className="md-bibtex-copy" onClick={copyBibtex} disabled={!publication.bibtex} title="Copy BibTeX">
-                <span className="md-icon" style={{ fontSize: '14px' }}>{copied ? 'check' : 'content_copy'}</span>
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {showCitationAnalysis && (
-          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--md-outline-variant)' }}>
+      {publication.citations > 0 && (
+        <div className="md-card-details" onClick={(e) => e.stopPropagation()}>
+          <div style={{ paddingTop: '8px' }}>
              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
                <div>
                  <h4 className="md-headline" style={{ color: 'var(--md-primary)' }}>Citation Analytics</h4>
@@ -572,42 +574,23 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                    <h5 className="md-title">Citing Papers</h5>
                    <select className="md-select" style={{ width: '150px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
                      <option value="relevance">Relevance</option>
+                     <option value="trending">Trending</option>
                      <option value="newest">Newest</option>
                      <option value="oldest">Oldest</option>
                      <option value="title">Title</option>
                    </select>
                  </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                   {sortedCitingPapers.map((item, idx) => {
-                     const itemAuthorCount = item.authors ? item.authors.split(/,|\band\b/i).length : 0;
-                     return (
-                     <div key={idx} style={{ padding: '16px', backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}>
-                       <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
-                         {item.title}
-                       </a>
-                       <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
-                       <div className="md-chip-group" style={{ marginTop: '12px' }}>
-                         <span className="md-chip">{item.year || 'n.d.'}</span>
-                         <span className="md-chip">
-                           <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
-                           {formatNumber(item.citations || 0)} citations
-                         </span>
-                         <span className="md-chip">
-                           <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
-                           {itemAuthorCount} author{itemAuthorCount !== 1 ? 's' : ''}
-                         </span>
-                       </div>
-                       <div style={{ fontSize: '13px', marginTop: '12px', color: 'var(--md-on-surface)' }}>{item.snippet}</div>
-                     </div>
-                     );
-                   })}
+                   {sortedCitingPapers.map((item, idx) => (
+                     <CitingPaperCard key={idx} item={item} />
+                   ))}
                    {sortedCitingPapers.length === 0 && <div className="md-body">No citing papers found.</div>}
                  </div>
                </>
              )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -630,4 +613,79 @@ function LinkButton({ href, icon, label }) {
 
 function normalizeSearch(value) {
   return String(value || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+}
+
+function CitingPaperCard({ item }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [abstract, setAbstract] = useState(item.snippet);
+  const [loadingAbstract, setLoadingAbstract] = useState(false);
+  
+  const itemAuthorCount = item.authors ? item.authors.split(/,|\band\b/i).length : 0;
+
+  useEffect(() => {
+    if (isExpanded && item.title && !loadingAbstract && abstract === item.snippet) {
+      const fetchAbstract = async () => {
+        setLoadingAbstract(true);
+        try {
+          const res = await fetch(`https://api.crossref.org/works?query.title=${encodeURIComponent(item.title)}&select=abstract&rows=1`);
+          const data = await res.json();
+          const fetchedAbstract = data?.message?.items?.[0]?.abstract;
+          if (fetchedAbstract) {
+            const cleanAbstract = fetchedAbstract.replace(/<\/?[^>]+(>|$)/g, "").trim();
+            if (cleanAbstract.length > item.snippet.length) {
+              setAbstract(cleanAbstract);
+            }
+          }
+        } catch (e) {
+          // Fallback to snippet
+        } finally {
+          setLoadingAbstract(false);
+        }
+      };
+      fetchAbstract();
+    }
+  }, [isExpanded, item.title, abstract, loadingAbstract, item.snippet]);
+
+  return (
+    <div 
+      className={`md-card ${isExpanded ? 'expanded' : ''}`}
+      style={{ padding: '12px', cursor: 'pointer', marginBottom: 0, backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}
+      onClick={() => setIsExpanded(!isExpanded)}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
+            {item.title}
+          </a>
+          <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
+        </div>
+        <button 
+          className="md-btn-icon" 
+          style={{ width: '32px', height: '32px', marginLeft: '12px', flexShrink: 0 }}
+          aria-label={isExpanded ? "Collapse" : "Expand"}
+        >
+          <span className="md-icon" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>
+        </button>
+      </div>
+
+      <div className="md-chip-group" style={{ marginTop: '12px' }}>
+        <span className="md-chip">{item.year || 'n.d.'}</span>
+        <span className="md-chip">
+          <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
+          {formatNumber(item.citations || 0)} citations
+        </span>
+        <span className="md-chip">
+          <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
+          {itemAuthorCount} author{itemAuthorCount !== 1 ? 's' : ''}
+        </span>
+      </div>
+      
+      {isExpanded && abstract && (
+        <div style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
+          {loadingAbstract && <span className="md-icon" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
+          {abstract}
+        </div>
+      )}
+    </div>
+  );
 }
