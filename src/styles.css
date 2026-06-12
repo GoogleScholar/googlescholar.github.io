@@ -325,12 +325,6 @@ html, body {
   color: var(--md-on-surface-variant);
   font-size: 14px;
   margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.md-card.expanded .md-card-subtitle {
-  white-space: normal;
 }
 
 .md-card-details {
