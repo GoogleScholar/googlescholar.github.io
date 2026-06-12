@@ -401,6 +401,20 @@ function PaperCard({ publication, isExpanded, onToggle }) {
   const [citedByLoading, setCitedByLoading] = useState(false);
   const [citedByError, setCitedByError] = useState('');
   const [showCitationAnalysis, setShowCitationAnalysis] = useState(false);
+  const [citedBySort, setCitedBySort] = useState('relevance');
+
+  const sortedCitingPapers = useMemo(() => {
+    if (!citedByData?.items) return [];
+    let items = [...citedByData.items];
+    if (citedBySort === 'newest') {
+      items.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+    } else if (citedBySort === 'oldest') {
+      items.sort((a, b) => (Number(a.year) || 9999) - (Number(b.year) || 9999));
+    } else if (citedBySort === 'title') {
+      items.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    return items;
+  }, [citedByData, citedBySort]);
   
   async function copyBibtex(event) {
     event.stopPropagation();
@@ -446,8 +460,8 @@ function PaperCard({ publication, isExpanded, onToggle }) {
   }
 
   return (
-    <div className={`md-card ${isExpanded ? 'expanded' : ''}`} onClick={onToggle}>
-      <div className="md-card-header">
+    <div className={`md-card ${isExpanded ? 'expanded' : ''}`}>
+      <div className="md-card-header" onClick={onToggle} style={{ cursor: 'pointer' }}>
         <div style={{ flex: 1 }}>
           <h3 className="md-title md-card-title">{publication.title}</h3>
           <p className="md-card-subtitle">{publication.authors}</p>
@@ -506,8 +520,17 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                      <CitationTimeline citationsPerYear={citedByData.citationsPerYear} />
                    </div>
                  )}
+                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                   <h5 className="md-title" style={{ fontSize: '14px' }}>Citing Papers</h5>
+                   <select className="md-select" style={{ width: '150px', padding: '4px 24px 4px 8px', fontSize: '12px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
+                     <option value="relevance">Relevance</option>
+                     <option value="newest">Newest</option>
+                     <option value="oldest">Oldest</option>
+                     <option value="title">Title</option>
+                   </select>
+                 </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                   {citedByData.items.map((item, idx) => (
+                   {sortedCitingPapers.map((item, idx) => (
                      <div key={idx} style={{ padding: '12px', backgroundColor: 'var(--md-surface-variant)', borderRadius: 'var(--md-border-radius-sm)' }}>
                        <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 500, color: 'var(--md-primary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
                          {item.title}
@@ -516,7 +539,7 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                        <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.8 }}>{item.snippet}</div>
                      </div>
                    ))}
-                   {citedByData.items.length === 0 && <div className="md-body">No citing papers found.</div>}
+                   {sortedCitingPapers.length === 0 && <div className="md-body">No citing papers found.</div>}
                  </div>
                </>
              )}
