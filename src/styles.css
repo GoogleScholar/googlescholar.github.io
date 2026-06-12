@@ -34,21 +34,22 @@
 }
 
 [data-theme="dark"] {
-  --md-primary: #818cf8;
-  --md-primary-container: #3730a3;
+  /* GitHub Dark Theme Palette */
+  --md-primary: #58a6ff;
+  --md-primary-container: #1f6feb;
   --md-on-primary: #ffffff;
-  --md-on-primary-container: #e0e7ff;
+  --md-on-primary-container: #c9d1d9;
   
-  --md-background: #0f172a;
-  --md-on-background: #f8fafc;
+  --md-background: #0d1117;
+  --md-on-background: #c9d1d9;
   
-  --md-surface: #1e293b;
-  --md-on-surface: #f8fafc;
-  --md-surface-variant: #334155;
-  --md-on-surface-variant: #94a3b8;
+  --md-surface: #161b22;
+  --md-on-surface: #c9d1d9;
+  --md-surface-variant: #21262d;
+  --md-on-surface-variant: #8b949e;
   
-  --md-outline: #475569;
-  --md-outline-variant: #334155;
+  --md-outline: #30363d;
+  --md-outline-variant: #21262d;
   
   --md-elevation-1: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --md-elevation-2: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
@@ -178,6 +179,7 @@ html, body {
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s, color 0.2s;
+  text-decoration: none;
 }
 .md-btn-icon:hover {
   background-color: var(--md-surface-variant);
@@ -449,6 +451,52 @@ html, body {
 }
 
 /* Utilities */
+.md-bibtex-container {
+  position: relative;
+  background-color: #0d1117; /* GitHub Dark */
+  border-radius: var(--md-border-radius-md);
+  border: 1px solid var(--md-outline-variant);
+  overflow: hidden;
+}
+
+.md-bibtex-container pre {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.md-bibtex-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #c9d1d9;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.md-bibtex-copy:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255,255,255,0.3);
+}
+.md-bibtex-copy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 pre {
   background-color: var(--md-surface-variant);
   color: var(--md-on-surface);

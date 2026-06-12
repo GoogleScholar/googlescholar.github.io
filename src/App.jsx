@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CitationTimeline } from './lib/charts.jsx';
 import { formatNumber, getPublicationYearRange, truncateText } from './lib/format.js';
 import { normalizeScholarPayload } from './lib/scholarData.js';
@@ -509,6 +511,9 @@ function PaperCard({ publication, isExpanded, onToggle }) {
               <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
               {authorCount} author{authorCount !== 1 ? 's' : ''}
             </span>
+            <span style={{ width: '8px' }}></span>
+            <LinkButton href={publication.links.scholar} icon="school" label="View on Google Scholar" />
+            <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
           </div>
         </div>
         
@@ -524,24 +529,17 @@ function PaperCard({ publication, isExpanded, onToggle }) {
       </div>
 
       <div className="md-card-details" onClick={(e) => e.stopPropagation()}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-          <div style={{ minWidth: 0, position: 'relative' }}>
+        <div style={{ display: 'block', marginBottom: '24px' }}>
+          <div style={{ position: 'relative' }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>BibTeX</span>
             <div className="md-bibtex-container">
-              <pre>{publication.bibtex || 'No BibTeX available'}</pre>
+              <SyntaxHighlighter language="latex" style={vscDarkPlus} customStyle={{ margin: 0, padding: '16px', fontSize: '13px', backgroundColor: 'transparent' }} wrapLines={true} wrapLongLines={true}>
+                {publication.bibtex || 'No BibTeX available'}
+              </SyntaxHighlighter>
               <button className="md-bibtex-copy" onClick={copyBibtex} disabled={!publication.bibtex} title="Copy BibTeX">
                 <span className="md-icon" style={{ fontSize: '14px' }}>{copied ? 'check' : 'content_copy'}</span>
                 {copied ? 'Copied' : 'Copy'}
               </button>
-            </div>
-          </div>
-          
-          <div style={{ minWidth: 0 }}>
-            <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Links</span>
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'center' }}>
-              <LinkButton href={publication.links.scholar} icon="school" label="View on Google Scholar" />
-              <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
-              <LinkButton href={publication.links.citedBy} icon="format_quote" label="View Citing Papers" />
             </div>
           </div>
         </div>
