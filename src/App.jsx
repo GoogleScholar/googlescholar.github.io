@@ -253,8 +253,8 @@ export default function App() {
           <div className="md-content-grid">
             <aside className="md-sidebar">
               <div className="md-input-wrapper">
-                <span className="md-icon">search</span>
-                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." />
+                <span className="md-icon" aria-hidden="true">search</span>
+                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." aria-label="Search title or authors" />
               </div>
 
               <YearRangeFilter 
@@ -264,8 +264,8 @@ export default function App() {
               />
 
               <div className="md-input-group">
-                <label className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Sort</label>
-                <select className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <label htmlFor="sort-select" className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Sort</label>
+                <select id="sort-select" className="md-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                   {SORT_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
               </div>
@@ -291,14 +291,30 @@ export default function App() {
               </div>
 
               <div>
-                {filteredPublications.map((publication) => (
-                  <PaperCard
-                    key={publication.id}
-                    publication={publication}
-                    isExpanded={publication.id === expandedId}
-                    onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
-                  />
-                ))}
+                {filteredPublications.length === 0 ? (
+                  <div className="md-state-panel" style={{ padding: '48px 16px' }}>
+                    <span className="md-icon" style={{ fontSize: '48px', color: 'var(--md-on-surface-variant)', marginBottom: '16px' }}>search_off</span>
+                    <h3 className="md-title">No matching publications</h3>
+                    <p className="md-body" style={{ color: 'var(--md-on-surface-variant)', maxWidth: '400px', margin: '8px auto 24px' }}>
+                      We couldn't find any papers matching your current search and year filters.
+                    </p>
+                    <button
+                      className="md-btn md-btn-primary"
+                      onClick={() => { setQuery(''); setYearRange([]); }}
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                ) : (
+                  filteredPublications.map((publication) => (
+                    <PaperCard
+                      key={publication.id}
+                      publication={publication}
+                      isExpanded={publication.id === expandedId}
+                      onToggle={() => setExpandedId(publication.id === expandedId ? '' : publication.id)}
+                    />
+                  ))
+                )}
               </div>
             </main>
           </div>
@@ -328,7 +344,7 @@ function LandingPage({ onNavigate }) {
 
         <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', gap: '12px' }}>
           <div className="md-input-wrapper" style={{ flex: 1 }}>
-            <span className="md-icon">person</span>
+            <span className="md-icon" aria-hidden="true">person</span>
             <input 
               className="md-input" 
               style={{ fontSize: '16px', padding: '16px 16px 16px 48px' }}
@@ -336,6 +352,7 @@ function LandingPage({ onNavigate }) {
               value={input} 
               onChange={e => setInput(e.target.value)} 
               placeholder="e.g. vJjq9LwAAAAJ" 
+              aria-label="Google Scholar User ID"
               required
             />
           </div>
