@@ -38,6 +38,13 @@ function saveRecentProfile(profile) {
   }
 }
 
+function getInitialDarkMode() {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  return false;
+}
+
 export default function App() {
   const [userId, setUserId] = useState(getInitialUserId);
   const [data, setData] = useState(null);
@@ -47,7 +54,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('citations');
   const [yearFilter, setYearFilter] = useState('all');
   const [expandedId, setExpandedId] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 
   useEffect(() => {
     const handlePopState = () => {
