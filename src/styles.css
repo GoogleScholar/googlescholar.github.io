@@ -1,11 +1,11 @@
 :root {
   /* Material Design Colors */
-  --md-primary: #0a58ca; /* Deeper, more premium blue */
+  --md-primary: #0a58ca;
   --md-primary-container: #e7f1ff;
   --md-on-primary: #ffffff;
   --md-on-primary-container: #002766;
   
-  --md-background: #f8f9fa; /* Softer white */
+  --md-background: #f8f9fa;
   --md-on-background: #202124;
   
   --md-surface: #ffffff;
@@ -20,13 +20,13 @@
   --md-on-error: #ffffff;
   
   /* Refined Shadows */
-  --md-elevation-1: 0 1px 3px rgba(60,64,67,0.1), 0 1px 2px rgba(60,64,67,0.06);
-  --md-elevation-2: 0 4px 6px rgba(60,64,67,0.1), 0 2px 4px rgba(60,64,67,0.06);
-  --md-elevation-3: 0 10px 15px rgba(60,64,67,0.1), 0 4px 6px rgba(60,64,67,0.05);
+  --md-elevation-1: 0 1px 2px rgba(60,64,67,0.15), 0 1px 3px rgba(60,64,67,0.1);
+  --md-elevation-2: 0 2px 4px rgba(60,64,67,0.15), 0 2px 6px rgba(60,64,67,0.1);
+  --md-elevation-3: 0 4px 8px rgba(60,64,67,0.15), 0 4px 10px rgba(60,64,67,0.1);
   
-  --md-border-radius-sm: 8px;
-  --md-border-radius-md: 16px; /* Increased for modern feel */
-  --md-border-radius-lg: 24px;
+  --md-border-radius-sm: 6px;
+  --md-border-radius-md: 8px;
+  --md-border-radius-lg: 12px;
   --md-border-radius-full: 9999px;
   
   /* Typography */
@@ -50,9 +50,9 @@
   --md-outline: #5f6368;
   --md-outline-variant: #3c4043;
   
-  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2);
-  --md-elevation-2: 0 4px 6px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
-  --md-elevation-3: 0 10px 15px rgba(0,0,0,0.5), 0 4px 6px rgba(0,0,0,0.3);
+  --md-elevation-1: 0 1px 2px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2);
+  --md-elevation-2: 0 2px 4px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+  --md-elevation-3: 0 4px 8px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Global Reset */
@@ -66,9 +66,9 @@ html, body {
   font-family: var(--md-font-family);
   background-color: var(--md-background);
   color: var(--md-on-background);
-  line-height: 1.6;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.1px;
 }
 
 #root {
@@ -77,19 +77,19 @@ html, body {
   min-height: 100vh;
 }
 
-/* Typography Classes */
-.md-display { font-size: 40px; font-weight: 500; letter-spacing: -0.5px; line-height: 1.2; }
-.md-headline { font-size: 28px; font-weight: 500; letter-spacing: -0.25px; line-height: 1.3; }
-.md-title { font-size: 20px; font-weight: 500; letter-spacing: 0.15px; line-height: 1.4; }
-.md-body { font-size: 16px; font-weight: 400; letter-spacing: 0.1px; line-height: 1.6; }
-.md-label { font-size: 14px; font-weight: 500; letter-spacing: 0.1px; }
+/* Typography Classes - Compact Edition */
+.md-display { font-size: 28px; font-weight: 500; letter-spacing: -0.25px; line-height: 1.2; }
+.md-headline { font-size: 20px; font-weight: 500; letter-spacing: -0.1px; line-height: 1.3; }
+.md-title { font-size: 16px; font-weight: 500; letter-spacing: 0.1px; line-height: 1.3; }
+.md-body { font-size: 14px; font-weight: 400; letter-spacing: 0.1px; line-height: 1.4; }
+.md-label { font-size: 12px; font-weight: 500; letter-spacing: 0.1px; }
 
 /* Top App Bar */
 .md-app-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 32px;
+  padding: 8px 16px;
   background-color: var(--md-surface);
   color: var(--md-on-surface);
   box-shadow: var(--md-elevation-1);
@@ -102,7 +102,7 @@ html, body {
 .md-app-bar .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-decoration: none;
   color: inherit;
   transition: opacity 0.2s;
@@ -115,7 +115,7 @@ html, body {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
+  font-size: 20px; /* Reduced from 24px */
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -133,12 +133,12 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 24px;
+  gap: 6px;
+  padding: 6px 16px;
   border-radius: var(--md-border-radius-full);
   border: none;
   font-family: var(--md-font-family);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,14 +151,14 @@ html, body {
 }
 .md-btn-primary:hover {
   background-color: color-mix(in srgb, var(--md-primary), black 10%);
-  box-shadow: var(--md-elevation-2);
+  box-shadow: var(--md-elevation-1);
   transform: translateY(-1px);
 }
 
 .md-btn-text {
   background-color: transparent;
   color: var(--md-primary);
-  padding: 8px 16px;
+  padding: 6px 12px;
 }
 .md-btn-text:hover {
   background-color: var(--md-primary-container);
@@ -166,7 +166,7 @@ html, body {
 }
 
 .md-btn-icon {
-  padding: 10px;
+  padding: 6px;
   border-radius: 50%;
   background: transparent;
   color: var(--md-on-surface-variant);
@@ -186,30 +186,30 @@ html, body {
 .md-layout {
   display: flex;
   flex: 1;
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
 .md-sidebar {
-  width: 340px;
-  padding: 32px 24px;
+  width: 260px;
+  padding: 24px 16px;
   border-right: 1px solid var(--md-outline-variant);
   background-color: var(--md-background);
-  height: calc(100vh - 65px);
+  height: calc(100vh - 48px);
   position: sticky;
-  top: 65px;
+  top: 48px;
   overflow-y: auto;
 }
 
 .md-main-content {
   flex: 1;
-  padding: 32px 48px;
+  padding: 24px 32px;
   overflow-y: auto;
   background-color: var(--md-background);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .md-layout {
     flex-direction: column;
   }
@@ -218,29 +218,29 @@ html, body {
     height: auto;
     border-right: none;
     border-bottom: 1px solid var(--md-outline-variant);
-    padding: 24px;
+    padding: 16px;
   }
   .md-main-content {
-    padding: 24px;
+    padding: 16px;
   }
 }
 
-/* Input Fields (Premium Style) */
+/* Input Fields (Compact Style) */
 .md-input-group {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   position: relative;
 }
 
 .md-input-label {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--md-on-surface-variant);
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -252,19 +252,19 @@ html, body {
 }
 .md-input-wrapper .md-icon {
   position: absolute;
-  left: 16px;
+  left: 12px;
   color: var(--md-on-surface-variant);
   pointer-events: none;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .md-input {
   width: 100%;
-  padding: 14px 16px 14px 44px; /* padding for icon */
-  border: 2px solid var(--md-outline);
+  padding: 8px 12px 8px 36px;
+  border: 1px solid var(--md-outline);
   border-radius: var(--md-border-radius-sm);
   font-family: inherit;
-  font-size: 16px;
+  font-size: 13px;
   background-color: var(--md-surface);
   color: var(--md-on-surface);
   outline: none;
@@ -279,16 +279,16 @@ html, body {
 .md-input:focus {
   border-color: var(--md-primary);
   background-color: var(--md-surface);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .md-select {
   width: 100%;
-  padding: 14px 40px 14px 16px;
-  border: 2px solid var(--md-outline);
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--md-outline);
   border-radius: var(--md-border-radius-sm);
   font-family: inherit;
-  font-size: 16px;
+  font-size: 13px;
   background-color: var(--md-surface);
   color: var(--md-on-surface);
   outline: none;
@@ -297,8 +297,8 @@ html, body {
   transition: all 0.2s ease;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%235f6368%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 18px auto;
+  background-position: right 10px center;
+  background-size: 16px auto;
 }
 
 .md-select:hover {
@@ -311,29 +311,29 @@ html, body {
   background-color: var(--md-surface);
 }
 
-/* Cards */
+/* Cards - Compact Edition */
 .md-card {
   background-color: var(--md-surface);
   border-radius: var(--md-border-radius-md);
   border: 1px solid var(--md-outline-variant);
-  padding: 24px;
-  margin-bottom: 20px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .md-card:hover {
-  box-shadow: var(--md-elevation-2);
-  transform: translateY(-2px);
+  box-shadow: var(--md-elevation-1);
+  transform: translateY(-1px);
 }
 
 .md-card.expanded {
-  box-shadow: var(--md-elevation-3);
+  box-shadow: var(--md-elevation-2);
   border-color: transparent;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   cursor: default;
 }
 
@@ -341,14 +341,14 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 24px;
+  gap: 16px;
 }
 
 .md-card-title {
   color: var(--md-primary);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.3;
   transition: color 0.2s;
 }
 .md-card:hover .md-card-title {
@@ -357,20 +357,26 @@ html, body {
 
 .md-card-subtitle {
   color: var(--md-on-surface-variant);
-  font-size: 15px;
-  margin-bottom: 4px;
+  font-size: 13px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.md-card.expanded .md-card-subtitle {
+  white-space: normal;
 }
 
 .md-card-details {
   border-top: 1px solid var(--md-outline-variant);
-  padding-top: 24px;
-  margin-top: 8px;
+  padding-top: 16px;
+  margin-top: 4px;
   display: none;
-  animation: slideDown 0.3s ease-out;
+  animation: slideDown 0.2s ease-out;
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -382,11 +388,11 @@ html, body {
 .md-chip {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
+  padding: 4px 10px;
   border-radius: var(--md-border-radius-full);
   background-color: var(--md-surface-variant);
   color: var(--md-on-surface-variant);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   border: 1px solid transparent;
   transition: background-color 0.2s;
@@ -398,46 +404,52 @@ html, body {
 .md-chip-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* Profile Banner (Hero) */
+/* Profile Banner (Hero) - Compact */
 .md-profile-banner {
   background: linear-gradient(135deg, var(--md-primary-container) 0%, var(--md-surface) 100%);
   color: var(--md-on-surface);
-  padding: 48px 40px;
+  padding: 24px 32px;
   border-radius: var(--md-border-radius-lg);
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
+  gap: 24px;
   align-items: center;
   box-shadow: var(--md-elevation-1);
   border: 1px solid var(--md-outline-variant);
 }
 
 .md-avatar {
-  width: 100px;
-  height: 100px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background-color: var(--md-primary);
   color: var(--md-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-size: 24px;
   font-weight: 500;
   object-fit: cover;
-  box-shadow: var(--md-elevation-2);
+  box-shadow: var(--md-elevation-1);
+}
+
+.md-avatar.large {
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
 }
 
 .md-metrics-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
-  margin-top: 24px;
+  gap: 20px;
+  margin-top: 16px;
   background-color: var(--md-surface);
-  padding: 16px 24px;
+  padding: 12px 20px;
   border-radius: var(--md-border-radius-md);
   box-shadow: var(--md-elevation-1);
 }
@@ -448,25 +460,25 @@ html, body {
 }
 
 .md-metric-value {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--md-primary);
 }
 
 .md-metric-label {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--md-on-surface-variant);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* List Items (Search Results) */
+/* List Items */
 .md-list-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: 8px 12px;
   border-radius: var(--md-border-radius-sm);
   background: transparent;
   border: none;
@@ -475,34 +487,34 @@ html, body {
   cursor: pointer;
   color: var(--md-on-surface);
   transition: all 0.2s;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .md-list-item:hover {
   background-color: var(--md-surface-variant);
-  transform: translateX(4px);
+  transform: translateX(2px);
 }
 
 /* Utilities */
 .md-divider {
   height: 1px;
   background-color: var(--md-outline-variant);
-  margin: 32px 0;
+  margin: 16px 0;
   border: none;
 }
 
 pre {
   background-color: var(--md-surface-variant);
   color: var(--md-on-surface);
-  padding: 16px;
+  padding: 12px;
   border-radius: var(--md-border-radius-sm);
   overflow-x: auto;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 13px;
+  font-size: 11px;
   border: 1px solid var(--md-outline-variant);
 }
 
-/* Chart Styles (Fixing the glitch) */
+/* Chart Styles */
 .timeline-chart {
   width: 100%;
   height: 100%;
@@ -511,7 +523,7 @@ pre {
 
 .timeline-chart text {
   fill: var(--md-on-surface-variant);
-  font-size: 12px;
+  font-size: 11px;
   font-family: var(--md-font-family);
 }
 
@@ -528,7 +540,7 @@ pre {
 .timeline-chart .chart-line {
   fill: none;
   stroke: var(--md-primary);
-  stroke-width: 2.5;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -551,7 +563,7 @@ pre {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 50vh;
   text-align: center;
   color: var(--md-on-surface-variant);
 }
@@ -561,17 +573,16 @@ pre {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 64px 24px;
+  padding: 48px 16px;
   flex: 1;
 }
 
 .md-landing-hero {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
   width: 100%;
 }
 
 .md-recent-profiles {
   width: 100%;
 }
-

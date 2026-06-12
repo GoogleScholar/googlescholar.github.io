@@ -1,6 +1,6 @@
 import { formatNumber, sortedYears } from './format.js';
 
-export function CitationTimeline({ citationsPerYear }) {
+export function CitationTimeline({ citationsPerYear, selectedYear, onYearSelect }) {
   const points = sortedYears(citationsPerYear);
 
   if (points.length === 0) {
@@ -50,14 +50,29 @@ export function CitationTimeline({ citationsPerYear }) {
       </text>
       <path className="chart-area" d={areaPath} />
       <path className="chart-line" d={path} />
-      {coordinates.map((point) => (
-        <g key={point.year}>
-          <circle cx={point.x} cy={point.y} r="4" />
-          <title>
-            {point.year}: {formatNumber(point.citations)} citations
-          </title>
-        </g>
-      ))}
+      {coordinates.map((point) => {
+        const isSelected = String(point.year) === String(selectedYear);
+        return (
+          <g 
+            key={point.year}
+            onClick={() => onYearSelect && onYearSelect(point.year)}
+            style={{ cursor: onYearSelect ? 'pointer' : 'default' }}
+          >
+            <circle 
+              cx={point.x} 
+              cy={point.y} 
+              r={isSelected ? "6" : "4"} 
+              style={{
+                fill: isSelected ? 'var(--md-primary)' : 'var(--md-surface)',
+                strokeWidth: isSelected ? 3 : 2
+              }}
+            />
+            <title>
+              {point.year}: {formatNumber(point.citations)} citations
+            </title>
+          </g>
+        );
+      })}
       {labels.map((point) => (
         <text key={`label-${point.year}`} x={point.x} y={height - 9} textAnchor="middle">
           {point.year}

@@ -262,7 +262,11 @@ export default function App() {
                   <h2 className="md-headline">Citations by year</h2>
                 </div>
                 <div style={{ height: '150px' }}>
-                  <CitationTimeline citationsPerYear={metrics.citationsPerYear} />
+                <CitationTimeline 
+                  citationsPerYear={metrics.citationsPerYear}
+                  selectedYear={yearFilter}
+                  onYearSelect={(year) => setYearFilter(String(year))}
+                />
                 </div>
               </div>
             )}
@@ -419,7 +423,7 @@ function PaperCard({ publication, isExpanded, onToggle }) {
 
       <div className="md-card-details">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-          <div>
+          <div style={{ minWidth: 0 }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>BibTeX</span>
             <pre>{publication.bibtex || 'No BibTeX available'}</pre>
             <button className="md-btn md-btn-text" style={{ marginTop: '8px' }} onClick={copyBibtex} disabled={!publication.bibtex}>
@@ -428,7 +432,7 @@ function PaperCard({ publication, isExpanded, onToggle }) {
             </button>
           </div>
           
-          <div>
+          <div style={{ minWidth: 0 }}>
             <span className="md-label" style={{ color: 'var(--md-on-surface-variant)', display: 'block', marginBottom: '8px' }}>Links</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
               <LinkButton href={publication.links.scholar} icon="school" label="Scholar" />
