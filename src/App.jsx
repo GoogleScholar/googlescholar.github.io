@@ -370,8 +370,17 @@ function LandingPage({ onNavigate }) {
               <div 
                 key={profile.user} 
                 className="md-card" 
-                style={{ marginBottom: '0', alignItems: 'center', textAlign: 'center', padding: '24px 16px' }}
+                style={{ marginBottom: '0', alignItems: 'center', textAlign: 'center', padding: '24px 16px', cursor: 'pointer' }}
                 onClick={() => onNavigate(profile.user)}
+                role="button"
+                tabIndex={0}
+                aria-label={`View profile for ${profile.name}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onNavigate(profile.user);
+                  }
+                }}
               >
                 <Avatar name={profile.name} src={profile.avatarUrl} size="large" />
                 <h3 className="md-title" style={{ marginTop: '16px', marginBottom: '4px' }}>{profile.name}</h3>
@@ -668,6 +677,16 @@ function CitingPaperCard({ item }) {
       className={`md-card ${isExpanded ? 'expanded' : ''}`}
       style={{ padding: '12px', cursor: 'pointer', marginBottom: 0, backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}
       onClick={() => setIsExpanded(!isExpanded)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} citing paper ${item.title}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setIsExpanded(!isExpanded);
+        }
+      }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1, minWidth: 0 }}>
