@@ -252,9 +252,28 @@ export default function App() {
 
           <div className="md-content-grid">
             <aside className="md-sidebar">
-              <div className="md-input-wrapper">
+              <div className="md-input-wrapper" style={{ position: 'relative' }}>
                 <span className="md-icon" aria-hidden="true">search</span>
-                <input className="md-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or authors..." aria-label="Search title or authors" />
+                <input
+                  className="md-input"
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search title or authors..."
+                  aria-label="Search title or authors"
+                  style={query ? { paddingRight: '40px' } : {}}
+                />
+                {query && (
+                  <button
+                    className="md-btn-icon"
+                    onClick={() => setQuery('')}
+                    aria-label="Clear search"
+                    title="Clear search"
+                    style={{ position: 'absolute', right: '4px', top: '50%', transform: 'translateY(-50%)', padding: '4px', width: '32px', height: '32px' }}
+                  >
+                    <span className="md-icon" style={{ fontSize: '18px' }}>close</span>
+                  </button>
+                )}
               </div>
 
               <YearRangeFilter 
@@ -287,7 +306,9 @@ export default function App() {
             <main>
               <div style={{ marginBottom: '16px' }}>
                 <h2 className="md-headline">Publications</h2>
-                <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }}>Showing {formatNumber(filteredPublications.length)} papers</p>
+                <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }} aria-live="polite" aria-atomic="true">
+                  Showing {formatNumber(filteredPublications.length)} papers
+                </p>
               </div>
 
               <div>
