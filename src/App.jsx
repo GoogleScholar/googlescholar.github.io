@@ -12,7 +12,7 @@ const SORT_OPTIONS = [
   { value: 'title', label: 'Title (A-Z)' }
 ];
 
-const BACKEND_URL = 'http://localhost:3000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://backend-3aen.onrender.com';
 
 function getInitialUserId() {
   const params = new URLSearchParams(window.location.search);
