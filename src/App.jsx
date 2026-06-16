@@ -619,13 +619,16 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                  )}
                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                    <h5 className="md-title">Citing Papers</h5>
-                   <select className="md-select" style={{ width: '150px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
-                     <option value="relevance">Relevance</option>
-                     <option value="trending">Trending</option>
-                     <option value="newest">Newest</option>
-                     <option value="oldest">Oldest</option>
-                     <option value="title">Title</option>
-                   </select>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                     <label htmlFor={`sort-citations-${publication.id}`} className="md-label" style={{ color: 'var(--md-on-surface-variant)' }}>Sort by</label>
+                     <select id={`sort-citations-${publication.id}`} className="md-select" style={{ width: '150px' }} value={citedBySort} onChange={e => setCitedBySort(e.target.value)}>
+                       <option value="relevance">Relevance</option>
+                       <option value="trending">Trending</option>
+                       <option value="newest">Newest</option>
+                       <option value="oldest">Oldest</option>
+                       <option value="title">Title</option>
+                     </select>
+                   </div>
                  </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                    {sortedCitingPapers.map((item, idx) => (
@@ -696,22 +699,11 @@ function CitingPaperCard({ item }) {
   return (
     <div 
       className={`md-card ${isExpanded ? 'expanded' : ''}`}
-      style={{ padding: '12px', cursor: 'pointer', marginBottom: 0, backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}
-      onClick={() => setIsExpanded(!isExpanded)}
-      role="button"
-      tabIndex={0}
-      aria-expanded={isExpanded}
-      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} citing paper ${item.title}`}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setIsExpanded(!isExpanded);
-        }
-      }}
+      style={{ padding: '12px', marginBottom: 0, backgroundColor: 'var(--md-surface)', border: '1px solid var(--md-outline-variant)', borderRadius: 'var(--md-border-radius-md)' }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
+          <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
             {item.title}
           </a>
           <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
@@ -719,7 +711,9 @@ function CitingPaperCard({ item }) {
         <button 
           className="md-btn-icon" 
           style={{ width: '32px', height: '32px', marginLeft: '12px', flexShrink: 0 }}
+          aria-expanded={isExpanded}
           aria-label={isExpanded ? "Collapse" : "Expand"}
+          onClick={() => setIsExpanded(!isExpanded)}
         >
           <span className="md-icon" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>
         </button>
