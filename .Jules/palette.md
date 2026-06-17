@@ -10,3 +10,7 @@
 ## 2024-06-16 - Interactive elements within an interactive element
 **Learning:** Screen readers and accessibility tools struggle when an interactive element (like a link `<a>` or button `<button>`) is nested within another interactive element (like a `div` with `role="button"` or `tabIndex="0"`). This leads to confusing navigation and unpredictable behavior for keyboard users.
 **Action:** Always ensure that interactive elements (buttons, links, inputs) are not nested inside other interactive elements or containers with interactive ARIA roles. Apply event listeners and roles to specific, non-nested trigger elements instead.
+
+## 2026-06-17 - Material Icon Ligature Accessibility
+**Learning:** Material Icons implemented with ligatures (e.g., `<span class="md-icon">group</span>`) are read aloud by screen readers as the literal text ("group") unless explicitly hidden, creating significant noise for icon-only buttons or decorative chips.
+**Action:** Always add `aria-hidden="true"` to `.md-icon` elements, especially those inside chips or icon buttons, to ensure a clean screen reader experience.

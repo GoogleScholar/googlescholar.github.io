@@ -555,11 +555,11 @@ function PaperCard({ publication, isExpanded, onToggle }) {
           <div className="md-chip-group" style={{ marginTop: '12px' }}>
             <span className="md-chip">{publication.year || 'n.d.'}</span>
             <span className="md-chip">
-              <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
+              <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
               {formatNumber(publication.citations)} citations
             </span>
             <span className="md-chip">
-              <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
+              <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
               {authorCount} author{authorCount !== 1 ? 's' : ''}
             </span>
             <span style={{ width: '8px' }}></span>
@@ -570,11 +570,11 @@ function PaperCard({ publication, isExpanded, onToggle }) {
               className="md-chip" 
               onClick={copyBibtex} 
               disabled={!publication.bibtex}
-              title="Copy BibTeX"
-              style={{ cursor: publication.bibtex ? 'pointer' : 'default', backgroundColor: copied ? 'var(--md-primary)' : '', color: copied ? 'var(--md-on-primary)' : '', border: 'none' }}
+              title={publication.bibtex ? "Copy BibTeX" : "No BibTeX available"}
+              style={{ cursor: publication.bibtex ? 'pointer' : 'not-allowed', backgroundColor: copied ? 'var(--md-primary)' : '', color: copied ? 'var(--md-on-primary)' : '', border: 'none', opacity: publication.bibtex ? 1 : 0.6 }}
             >
-              <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>{copied ? 'check' : 'content_copy'}</span>
-              {copied ? 'Copied' : 'BibTeX'}
+              <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>{copied ? 'check' : 'content_copy'}</span>
+              <span aria-live="polite">{copied ? 'Copied' : 'BibTeX'}</span>
             </button>
           </div>
         </div>
@@ -656,7 +656,7 @@ function LinkButton({ href, icon, label }) {
   if (!href) return null;
   return (
     <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={label} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }}>
-      <span className="md-icon">{icon}</span>
+      <span className="md-icon" aria-hidden="true">{icon}</span>
     </a>
   );
 }
