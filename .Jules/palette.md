@@ -14,3 +14,7 @@
 ## 2026-06-17 - Material Icon Ligature Accessibility
 **Learning:** Material Icons implemented with ligatures (e.g., `<span class="md-icon">group</span>`) are read aloud by screen readers as the literal text ("group") unless explicitly hidden, creating significant noise for icon-only buttons or decorative chips.
 **Action:** Always add `aria-hidden="true"` to `.md-icon` elements, especially those inside chips or icon buttons, to ensure a clean screen reader experience.
+
+## 2023-10-25 - Decorative Avatars
+**Learning:** Screen readers will announce the `alt` text of avatars, which leads to redundant announcements when the avatar is rendered immediately adjacent to the user's name text.
+**Action:** Apply `alt=""` and `aria-hidden="true"` to avatars that are purely decorative or immediately accompanied by the corresponding text label to improve screen reader flow.
