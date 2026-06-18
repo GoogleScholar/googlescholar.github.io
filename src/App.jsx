@@ -223,16 +223,16 @@ export default function App() {
       {!userId && <LandingPage onNavigate={navigateToUser} />}
 
       {userId && status.loading && (
-        <div className="md-state-panel">
-          <span className="md-icon" style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 1s linear infinite' }}>refresh</span>
+        <div className="md-state-panel" role="status">
+          <span className="md-icon" aria-hidden="true" style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 1s linear infinite' }}>refresh</span>
           <h2 className="md-headline">Fetching Profile...</h2>
           <p className="md-body">Querying Google Scholar for {userId}</p>
         </div>
       )}
 
       {userId && status.error && (
-        <div className="md-state-panel">
-          <span className="md-icon" style={{ fontSize: '48px', color: 'var(--md-error)', marginBottom: '16px' }}>error</span>
+        <div className="md-state-panel" role="alert">
+          <span className="md-icon" aria-hidden="true" style={{ fontSize: '48px', color: 'var(--md-error)', marginBottom: '16px' }}>error</span>
           <h2 className="md-headline" style={{ color: 'var(--md-error)' }}>Unable to load Scholar profile</h2>
           <p className="md-body" style={{ maxWidth: '400px', marginTop: '8px' }}>{status.error}</p>
           <button className="md-btn md-btn-primary" style={{ marginTop: '24px' }} onClick={() => navigateToUser(userId)}>
@@ -608,8 +608,8 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                )}
              </div>
 
-             {citedByLoading && <div className="md-state-panel" style={{ height: '200px' }}><span className="md-icon" style={{ animation: 'spin 1s linear infinite', fontSize: '32px' }}>refresh</span></div>}
-             {citedByError && <div className="md-state-panel" style={{ height: '200px', color: 'var(--md-error)' }}>{citedByError}</div>}
+             {citedByLoading && <div className="md-state-panel" role="status" style={{ height: '200px' }}><span className="md-icon" aria-hidden="true" style={{ animation: 'spin 1s linear infinite', fontSize: '32px' }}>refresh</span></div>}
+             {citedByError && <div className="md-state-panel" role="alert" style={{ height: '200px', color: 'var(--md-error)' }}>{citedByError}</div>}
              {citedByData && (
                <>
                  {Object.keys(citedByData.citationsPerYear).length > 0 && (
@@ -648,8 +648,8 @@ function PaperCard({ publication, isExpanded, onToggle }) {
 function Avatar({ name, src, size = 'small' }) {
   const initials = String(name || 'S').split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join('');
   const className = `md-avatar ${size}`;
-  if (src) return <img className={className} src={src} alt={name} />;
-  return <div className={className}>{initials}</div>;
+  if (src) return <img className={className} src={src} alt="" aria-hidden="true" />;
+  return <div className={className} aria-hidden="true">{initials}</div>;
 }
 
 function LinkButton({ href, icon, label }) {
