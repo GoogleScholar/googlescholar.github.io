@@ -18,3 +18,8 @@
 ## 2023-10-25 - Decorative Avatars
 **Learning:** Screen readers will announce the `alt` text of avatars, which leads to redundant announcements when the avatar is rendered immediately adjacent to the user's name text.
 **Action:** Apply `alt=""` and `aria-hidden="true"` to avatars that are purely decorative or immediately accompanied by the corresponding text label to improve screen reader flow.
+
+## 2025-02-25 - Focus Management on Ephemeral Action Elements
+
+**Learning:** When interactive elements (like a "Clear Search" or "Clear Filters" button) conditionally render based on state, clicking them causes them to be removed from the DOM. This causes screen readers and keyboard focus to drop entirely to the `<body>` element, disorienting the user.
+**Action:** When creating conditionally rendered interactive elements that remove themselves on click, ensure you use a `ref` to programmatically move focus to a logical adjacent element (like the associated search input) immediately after the action completes.

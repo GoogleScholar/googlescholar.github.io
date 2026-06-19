@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { CitationTimeline } from './lib/charts.jsx';
 import { YearRangeFilter } from './lib/YearRangeFilter.jsx';
 import { formatNumber, getPublicationYearRange, truncateText, normalizeYear } from './lib/format.js';
@@ -53,6 +53,7 @@ export default function App() {
   const [status, setStatus] = useState({ loading: false, error: '' });
   
   const [query, setQuery] = useState('');
+  const searchInputRef = useRef(null);
   const [sortBy, setSortBy] = useState('trending');
   const [yearRange, setYearRange] = useState([]);
   const [expandedId, setExpandedId] = useState('');
@@ -255,6 +256,7 @@ export default function App() {
               <div className="md-input-wrapper" style={{ position: 'relative' }}>
                 <span className="md-icon" aria-hidden="true">search</span>
                 <input
+                  ref={searchInputRef}
                   className="md-input"
                   type="text"
                   value={query}
@@ -266,12 +268,12 @@ export default function App() {
                 {query && (
                   <button
                     className="md-btn-icon"
-                    onClick={() => setQuery('')}
+                    onClick={() => { setQuery(''); searchInputRef.current?.focus(); }}
                     aria-label="Clear search"
                     title="Clear search"
                     style={{ position: 'absolute', right: '4px', top: '50%', transform: 'translateY(-50%)', padding: '4px', width: '32px', height: '32px' }}
                   >
-                    <span className="md-icon" style={{ fontSize: '18px' }}>close</span>
+                    <span className="md-icon" aria-hidden="true" style={{ fontSize: '18px' }}>close</span>
                   </button>
                 )}
               </div>
@@ -321,7 +323,7 @@ export default function App() {
                     </p>
                     <button
                       className="md-btn md-btn-primary"
-                      onClick={() => { setQuery(''); setYearRange([]); }}
+                      onClick={() => { setQuery(''); setYearRange([]); searchInputRef.current?.focus(); }}
                     >
                       Clear Filters
                     </button>
