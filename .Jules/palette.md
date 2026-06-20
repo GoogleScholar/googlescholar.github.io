@@ -23,3 +23,13 @@
 
 **Learning:** When interactive elements (like a "Clear Search" or "Clear Filters" button) conditionally render based on state, clicking them causes them to be removed from the DOM. This causes screen readers and keyboard focus to drop entirely to the `<body>` element, disorienting the user.
 **Action:** When creating conditionally rendered interactive elements that remove themselves on click, ensure you use a `ref` to programmatically move focus to a logical adjacent element (like the associated search input) immediately after the action completes.
+
+## 2025-02-25 - Focusable Disabled Elements
+
+**Learning:** When adding `disabled` attributes to interactive elements (e.g. `<button disabled>`), the element is removed from the tab order. This is problematic if the element has an informative tooltip (e.g. `title`) explaining *why* it's disabled. Keyboard users and screen reader users won't be able to access the tooltip.
+**Action:** Use `aria-disabled="true"` instead of `disabled`. This allows the element to remain focusable so tooltips and labels can be accessed. Ensure you manually handle preventing the click event in the `onClick` handler via `e.preventDefault()`.
+
+## 2025-02-25 - ARIA Labels for Third-Party Slider Handles
+
+**Learning:** Third-party components like `rc-slider` may default to unhelpful generic labels (like "slider") for screen readers, missing context about what the bounds actually represent (e.g., start and end years).
+**Action:** Always investigate the specific ARIA props available for third-party libraries (e.g., `ariaLabelForHandle` in `rc-slider`) and apply descriptive labels to give context to multi-thumb sliders.

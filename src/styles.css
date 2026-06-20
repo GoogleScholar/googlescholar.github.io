@@ -382,9 +382,13 @@ html, body {
   border: 1px solid transparent;
   transition: all 0.2s;
 }
-.md-chip:hover:not(:disabled) {
+.md-chip:hover:not(:disabled):not([aria-disabled="true"]) {
   background-color: var(--md-outline-variant);
   color: var(--md-on-surface);
+}
+.md-chip:focus-visible {
+  outline: 2px solid var(--md-primary);
+  outline-offset: 2px;
 }
 
 .md-chip-group {

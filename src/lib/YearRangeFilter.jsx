@@ -75,6 +75,7 @@ export function YearRangeFilter({ publications, yearRange, onChange }) {
           onChange={onChange}
           step={1}
           allowCross={false}
+          ariaLabelForHandle={['Start year', 'End year']}
           styles={{
             track: { backgroundColor: 'var(--md-primary)', height: '4px' },
             rail: { backgroundColor: 'var(--md-outline-variant)', height: '4px' },
