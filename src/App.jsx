@@ -540,7 +540,10 @@ function PaperCard({ publication, isExpanded, onToggle }) {
   
   async function copyBibtex(event) {
     event.stopPropagation();
-    if (!publication.bibtex) return;
+    if (!publication.bibtex) {
+      event.preventDefault();
+      return;
+    }
     await navigator.clipboard.writeText(publication.bibtex);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1400);
@@ -569,9 +572,10 @@ function PaperCard({ publication, isExpanded, onToggle }) {
             <LinkButton href={publication.links.external} icon="open_in_new" label="Original Publication" />
             
             <button 
+              type="button"
               className="md-chip" 
               onClick={copyBibtex} 
-              disabled={!publication.bibtex}
+              aria-disabled={!publication.bibtex}
               title={publication.bibtex ? "Copy BibTeX" : "No BibTeX available"}
               style={{ cursor: publication.bibtex ? 'pointer' : 'not-allowed', backgroundColor: copied ? 'var(--md-primary)' : '', color: copied ? 'var(--md-on-primary)' : '', border: 'none', opacity: publication.bibtex ? 1 : 0.6 }}
             >
