@@ -661,7 +661,7 @@ function Avatar({ name, src, size = 'small' }) {
 function LinkButton({ href, icon, label }) {
   if (!href) return null;
   return (
-    <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={label} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }}>
+    <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={`${label} (opens in a new tab)`} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }}>
       <span className="md-icon" aria-hidden="true">{icon}</span>
     </a>
   );

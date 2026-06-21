@@ -33,3 +33,7 @@
 
 **Learning:** Third-party components like `rc-slider` may default to unhelpful generic labels (like "slider") for screen readers, missing context about what the bounds actually represent (e.g., start and end years).
 **Action:** Always investigate the specific ARIA props available for third-party libraries (e.g., `ariaLabelForHandle` in `rc-slider`) and apply descriptive labels to give context to multi-thumb sliders.
+
+## 2023-10-25 - External Link Announcements
+**Learning:** Links opening in new tabs (`target="_blank"`) can be disorienting for screen reader users if they aren't explicitly informed of the context switch.
+**Action:** Always append an audible warning like `(opens in a new tab)` to the `aria-label` of external links so users know what to expect before interacting.
