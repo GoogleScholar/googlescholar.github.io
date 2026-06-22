@@ -192,7 +192,7 @@ export default function App() {
     <>
       <header className="md-app-bar">
         <a className="brand" href="/" onClick={goHome}>
-          <span className="md-icon" style={{ color: 'var(--md-primary)' }}>school</span>
+          <span className="md-icon" aria-hidden="true" style={{ color: 'var(--md-primary)' }}>school</span>
           <span className="md-headline">Scholar Analytics</span>
         </a>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -203,14 +203,14 @@ export default function App() {
             aria-label="Toggle Dark Mode"
             aria-pressed={darkMode}
           >
-            <span className="md-icon">{darkMode ? 'light_mode' : 'dark_mode'}</span>
+            <span className="md-icon" aria-hidden="true">{darkMode ? 'light_mode' : 'dark_mode'}</span>
           </button>
           <a 
             className="md-btn-icon" 
             href="https://github.com/GoogleScholar/googlescholar.github.io" 
             target="_blank" 
             rel="noreferrer"
-            aria-label="GitHub Repository"
+            aria-label="GitHub Repository (opens in a new tab)"
             title="GitHub Repository"
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit' }}
           >
@@ -316,7 +316,7 @@ export default function App() {
               <div>
                 {filteredPublications.length === 0 ? (
                   <div className="md-state-panel" style={{ padding: '48px 16px' }}>
-                    <span className="md-icon" style={{ fontSize: '48px', color: 'var(--md-on-surface-variant)', marginBottom: '16px' }}>search_off</span>
+                    <span className="md-icon" aria-hidden="true" style={{ fontSize: '48px', color: 'var(--md-on-surface-variant)', marginBottom: '16px' }}>search_off</span>
                     <h3 className="md-title">No matching publications</h3>
                     <p className="md-body" style={{ color: 'var(--md-on-surface-variant)', maxWidth: '400px', margin: '8px auto 24px' }}>
                       We couldn't find any papers matching your current search and year filters.
@@ -709,7 +709,7 @@ function CitingPaperCard({ item }) {
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <a href={item.url} target="_blank" rel="noreferrer" className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
+          <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} (opens in a new tab)`} className="md-body" style={{ fontWeight: 600, color: 'var(--md-primary)', textDecoration: 'none' }}>
             {item.title}
           </a>
           <p style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)', marginTop: '4px' }}>{item.authors}</p>
@@ -721,25 +721,25 @@ function CitingPaperCard({ item }) {
           aria-label={isExpanded ? "Collapse" : "Expand"}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span className="md-icon" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>
+          <span className="md-icon" aria-hidden="true" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>
         </button>
       </div>
 
       <div className="md-chip-group" style={{ marginTop: '12px' }}>
         <span className="md-chip">{item.year || 'n.d.'}</span>
         <span className="md-chip">
-          <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
+          <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
           {formatNumber(item.citations || 0)} citations
         </span>
         <span className="md-chip">
-          <span className="md-icon" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
+          <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>group</span>
           {itemAuthorCount} author{itemAuthorCount !== 1 ? 's' : ''}
         </span>
       </div>
       
       {isExpanded && abstract && (
         <div style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
-          {loadingAbstract && <span className="md-icon" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
+          {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
           {abstract}
         </div>
       )}

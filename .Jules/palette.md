@@ -37,3 +37,8 @@
 ## 2023-10-25 - External Link Announcements
 **Learning:** Links opening in new tabs (`target="_blank"`) can be disorienting for screen reader users if they aren't explicitly informed of the context switch.
 **Action:** Always append an audible warning like `(opens in a new tab)` to the `aria-label` of external links so users know what to expect before interacting.
+
+## 2025-03-02 - External Links and Material Icons A11y
+
+**Learning:** External links missing an audible warning can disorient screen reader users, and material icon ligatures are read literally if not hidden.
+**Action:** Added `(opens in a new tab)` to `aria-label` attributes for `target="_blank"` links, and added `aria-hidden="true"` to `.md-icon` elements.
