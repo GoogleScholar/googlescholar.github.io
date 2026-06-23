@@ -42,3 +42,6 @@
 
 **Learning:** External links missing an audible warning can disorient screen reader users, and material icon ligatures are read literally if not hidden.
 **Action:** Added `(opens in a new tab)` to `aria-label` attributes for `target="_blank"` links, and added `aria-hidden="true"` to `.md-icon` elements.
+## 2026-06-23 - Focus States on Custom Interactive Elements
+**Learning:** Adding `role="button"` and `tabIndex={0}` to a `<div>` (like the Recent Profiles cards) makes it focusable, but it lacks default browser focus styles. This makes it impossible for keyboard-only users to know which card is currently focused.
+**Action:** Always ensure custom interactive elements explicitly implement a `:focus-visible` style, matching the application's primary focus indicator pattern.
