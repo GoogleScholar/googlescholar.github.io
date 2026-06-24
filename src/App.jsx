@@ -590,7 +590,8 @@ function PaperCard({ publication, isExpanded, onToggle }) {
             className="md-btn-icon" 
             onClick={(e) => { e.stopPropagation(); onToggle(); }}
             aria-expanded={isExpanded}
-            aria-label={isExpanded ? "Collapse paper details" : "Expand paper details"}
+            aria-controls={`paper-details-${publication.id}`}
+            aria-label={isExpanded ? `Collapse details for ${publication.title}` : `Expand details for ${publication.title}`}
             title={isExpanded ? "Collapse" : "Expand"}
           >
             <span className="md-icon" aria-hidden="true">{isExpanded ? 'expand_less' : 'expand_more'}</span>
@@ -599,7 +600,7 @@ function PaperCard({ publication, isExpanded, onToggle }) {
       </div>
 
       {publication.citations > 0 && (
-        <div className="md-card-details" onClick={(e) => e.stopPropagation()}>
+        <div id={`paper-details-${publication.id}`} className="md-card-details" onClick={(e) => e.stopPropagation()}>
           <div style={{ paddingTop: '8px' }}>
              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
                <div>
@@ -718,7 +719,7 @@ function CitingPaperCard({ item }) {
           className="md-btn-icon" 
           style={{ width: '32px', height: '32px', marginLeft: '12px', flexShrink: 0 }}
           aria-expanded={isExpanded}
-          aria-label={isExpanded ? "Collapse" : "Expand"}
+          aria-label={isExpanded ? `Collapse details for ${item.title}` : `Expand details for ${item.title}`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <span className="md-icon" aria-hidden="true" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>

@@ -45,3 +45,8 @@
 ## 2026-06-23 - Focus States on Custom Interactive Elements
 **Learning:** Adding `role="button"` and `tabIndex={0}` to a `<div>` (like the Recent Profiles cards) makes it focusable, but it lacks default browser focus styles. This makes it impossible for keyboard-only users to know which card is currently focused.
 **Action:** Always ensure custom interactive elements explicitly implement a `:focus-visible` style, matching the application's primary focus indicator pattern.
+
+
+## 2024-05-24 - Contextual ARIA Labels for Repeating Elements
+**Learning:** Generic `aria-label`s like "Expand" or "Collapse details" on list items (like paper cards) are confusing for screen reader users who lose context when navigating through multiple items.
+**Action:** Always include the specific item identifier (e.g., paper title) in the `aria-label` for interactive elements within a list, and use `aria-controls` to link expand/collapse buttons to their details container.
