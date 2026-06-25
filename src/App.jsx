@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef, useId } from 'react';
 import { CitationTimeline } from './lib/charts.jsx';
 import { YearRangeFilter } from './lib/YearRangeFilter.jsx';
 import { formatNumber, getPublicationYearRange, truncateText, normalizeYear } from './lib/format.js';
@@ -74,6 +74,18 @@ export default function App() {
       document.documentElement.removeAttribute('data-theme');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      // Focus search on '/' press if not already in an input/textarea
+      if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -261,7 +273,7 @@ export default function App() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search title or authors..."
+                  placeholder="Search... (Press '/')"
                   aria-label="Search title or authors"
                   style={query ? { paddingRight: '40px' } : {}}
                 />
@@ -673,6 +685,7 @@ function normalizeSearch(value) {
 }
 
 function CitingPaperCard({ item }) {
+  const detailsId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
   const [abstract, setAbstract] = useState(item.snippet);
   const [loadingAbstract, setLoadingAbstract] = useState(false);
@@ -719,6 +732,7 @@ function CitingPaperCard({ item }) {
           className="md-btn-icon" 
           style={{ width: '32px', height: '32px', marginLeft: '12px', flexShrink: 0 }}
           aria-expanded={isExpanded}
+          aria-controls={detailsId}
           aria-label={isExpanded ? `Collapse details for ${item.title}` : `Expand details for ${item.title}`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
@@ -726,7 +740,7 @@ function CitingPaperCard({ item }) {
         </button>
       </div>
 
-      <div className="md-chip-group" style={{ marginTop: '12px' }}>
+      <div id={detailsId} className="md-chip-group" style={{ marginTop: '12px' }}>
         <span className="md-chip">{item.year || 'n.d.'}</span>
         <span className="md-chip">
           <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
