@@ -50,3 +50,8 @@
 ## 2024-05-24 - Contextual ARIA Labels for Repeating Elements
 **Learning:** Generic `aria-label`s like "Expand" or "Collapse details" on list items (like paper cards) are confusing for screen reader users who lose context when navigating through multiple items.
 **Action:** Always include the specific item identifier (e.g., paper title) in the `aria-label` for interactive elements within a list, and use `aria-controls` to link expand/collapse buttons to their details container.
+
+## 2025-03-02 - Deterministic IDs for Replicated Accordion Patterns
+
+**Learning:** When creating reusable accordion components (like `CitingPaperCard`) where the underlying data items might lack guaranteed unique IDs, standard hardcoded IDs fail to uniquely associate the toggle button with its details panel (causing `aria-controls` to be invalid or non-unique).
+**Action:** Use React's `useId()` hook to generate deterministic, unique IDs within component instances that can be reliably passed to both the interactive trigger's `aria-controls` attribute and the content panel's `id`.
