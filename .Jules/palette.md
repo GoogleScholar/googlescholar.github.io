@@ -55,3 +55,8 @@
 
 **Learning:** When creating reusable accordion components (like `CitingPaperCard`) where the underlying data items might lack guaranteed unique IDs, standard hardcoded IDs fail to uniquely associate the toggle button with its details panel (causing `aria-controls` to be invalid or non-unique).
 **Action:** Use React's `useId()` hook to generate deterministic, unique IDs within component instances that can be reliably passed to both the interactive trigger's `aria-controls` attribute and the content panel's `id`.
+
+## 2025-03-02 - Dynamic Document Titles in SPAs
+
+**Learning:** In a Single Page Application (SPA), navigating between different views or profiles does not inherently update the `document.title`. Screen reader users rely on the document title to understand the context of the page they are on, and sighted users rely on it for tab management. Failing to update it leads to confusion when switching views.
+**Action:** Always ensure that `document.title` is updated dynamically using a side effect (e.g. `useEffect` in React) when the primary contextual data (like a user profile) changes, and reset it appropriately when returning to a landing state.

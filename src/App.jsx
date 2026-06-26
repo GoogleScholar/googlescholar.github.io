@@ -145,6 +145,14 @@ export default function App() {
     return () => { isMounted = false; };
   }, [userId]);
 
+  useEffect(() => {
+    if (userId && data?.source?.profileName) {
+      document.title = `${data.source.profileName} - Scholar Analytics`;
+    } else {
+      document.title = 'Scholar Analytics';
+    }
+  }, [userId, data]);
+
   function navigateToUser(id) {
     if (!id || id.trim() === '') return;
     const cleanId = id.trim();
