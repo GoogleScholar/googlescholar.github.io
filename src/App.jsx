@@ -210,6 +210,7 @@ export default function App() {
 
   return (
     <>
+      <a href="#main-content" className="md-skip-link">Skip to main content</a>
       <header className="md-app-bar">
         <a className="brand" href="/" onClick={goHome}>
           <span className="md-icon" aria-hidden="true" style={{ color: 'var(--md-primary)' }}>school</span>
@@ -325,7 +326,7 @@ export default function App() {
               )}
             </aside>
 
-            <main>
+            <main id="main-content" tabIndex="-1">
               <div style={{ marginBottom: '16px' }}>
                 <h2 className="md-headline">Publications</h2>
                 <p className="md-body" style={{ color: 'var(--md-on-surface-variant)' }} aria-live="polite" aria-atomic="true">
@@ -373,11 +374,24 @@ function LandingPage({ onNavigate }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (input.trim()) onNavigate(input.trim());
+    const val = input.trim();
+    if (val) {
+      try {
+        const url = new URL(val);
+        const userParam = url.searchParams.get('user');
+        if (userParam) {
+          onNavigate(userParam);
+          return;
+        }
+      } catch (err) {
+        // Not a valid URL, treat as ID
+      }
+      onNavigate(val);
+    }
   }
 
   return (
-    <div className="md-landing-container">
+    <main id="main-content" tabIndex="-1" className="md-landing-container">
       <div className="md-landing-hero">
         <h1 className="md-display" style={{ marginBottom: '16px', color: 'var(--md-primary)' }}>Analyze any Scholar Profile</h1>
         <p className="md-body" style={{ fontSize: '18px', color: 'var(--md-on-surface-variant)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
@@ -436,7 +450,7 @@ function LandingPage({ onNavigate }) {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
 

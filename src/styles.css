@@ -130,6 +130,32 @@ html, body {
   font-feature-settings: 'liga';
 }
 
+/* Skip Link */
+.md-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 24px;
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  padding: 8px 16px;
+  border-radius: var(--md-border-radius-md);
+  font-family: var(--md-font-family);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  z-index: 1000;
+  transition: top 0.2s ease-in-out;
+}
+.md-skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--md-on-primary);
+  outline-offset: 2px;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
 /* Buttons */
 .md-btn {
   display: inline-flex;
