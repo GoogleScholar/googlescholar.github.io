@@ -60,3 +60,13 @@
 
 **Learning:** In a Single Page Application (SPA), navigating between different views or profiles does not inherently update the `document.title`. Screen reader users rely on the document title to understand the context of the page they are on, and sighted users rely on it for tab management. Failing to update it leads to confusion when switching views.
 **Action:** Always ensure that `document.title` is updated dynamically using a side effect (e.g. `useEffect` in React) when the primary contextual data (like a user profile) changes, and reset it appropriately when returning to a landing state.
+
+## 2025-03-02 - Skip Link Target Management
+
+**Learning:** When adding a "skip to main content" link to a Single Page Application with dynamic views, you must ensure the target ID (e.g., `#main-content`) is present on the correct semantic container (like `<main>`) across all possible rendering states. Additionally, applying `tabIndex="-1"` to the target element is necessary for older browsers to properly shift focus when the skip link is activated, and a `#main-content:focus { outline: none; }` CSS rule prevents an ugly focus ring from appearing around the entire page content after jumping.
+**Action:** Add the skip link as the first focusable element in the DOM. Ensure every major view state (e.g., landing page, profile view) has a semantic `<main id="main-content" tabIndex="-1">` wrapper. Suppress the outline on focus for the target element to maintain visual polish.
+
+## 2025-03-02 - Forgiving URL Input Parsing
+
+**Learning:** Users frequently copy the entire URL from their browser's address bar rather than isolating the specific ID required by an application (e.g., pasting `https://scholar.google.com/citations?user=vJjq9LwAAAAJ` instead of just `vJjq9LwAAAAJ`). Failing to handle this gracefully creates immediate friction.
+**Action:** Enhance single-purpose ID input fields to proactively attempt to parse the input as a URL using `new URL()`. If successful, silently extract the necessary query parameter and proceed; otherwise, fall back to treating the input as the raw ID. This makes the interface significantly more forgiving and intuitive without requiring extra user instruction.
