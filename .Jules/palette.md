@@ -70,3 +70,8 @@
 
 **Learning:** Users frequently copy the entire URL from their browser's address bar rather than isolating the specific ID required by an application (e.g., pasting `https://scholar.google.com/citations?user=vJjq9LwAAAAJ` instead of just `vJjq9LwAAAAJ`). Failing to handle this gracefully creates immediate friction.
 **Action:** Enhance single-purpose ID input fields to proactively attempt to parse the input as a URL using `new URL()`. If successful, silently extract the necessary query parameter and proceed; otherwise, fall back to treating the input as the raw ID. This makes the interface significantly more forgiving and intuitive without requiring extra user instruction.
+
+## 2025-03-02 - Accurate aria-controls Placement in Expandable Cards
+
+**Learning:** When building expandable components, placing the `id` referenced by `aria-controls` on an always-visible container instead of the actual conditionally rendered content container misleads screen reader users. The screen reader will read the static content but fail to announce the dynamically revealed content when the state changes.
+**Action:** Always ensure that the `id` referenced by an `aria-controls` attribute is applied directly to the specific container element that is being visually toggled (e.g., the conditionally rendered abstract div), not an adjacent static element.
