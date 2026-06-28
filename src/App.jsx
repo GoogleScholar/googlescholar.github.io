@@ -762,7 +762,7 @@ function CitingPaperCard({ item }) {
         </button>
       </div>
 
-      <div id={detailsId} className="md-chip-group" style={{ marginTop: '12px' }}>
+      <div className="md-chip-group" style={{ marginTop: '12px' }}>
         <span className="md-chip">{item.year || 'n.d.'}</span>
         <span className="md-chip">
           <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', marginRight: '4px' }}>format_quote</span>
@@ -775,7 +775,7 @@ function CitingPaperCard({ item }) {
       </div>
       
       {isExpanded && abstract && (
-        <div style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
+        <div id={detailsId} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
           {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
           {abstract}
         </div>
