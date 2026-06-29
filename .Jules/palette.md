@@ -75,3 +75,6 @@
 
 **Learning:** When building expandable components, placing the `id` referenced by `aria-controls` on an always-visible container instead of the actual conditionally rendered content container misleads screen reader users. The screen reader will read the static content but fail to announce the dynamically revealed content when the state changes.
 **Action:** Always ensure that the `id` referenced by an `aria-controls` attribute is applied directly to the specific container element that is being visually toggled (e.g., the conditionally rendered abstract div), not an adjacent static element.
+## 2025-06-29 - aria-controls Reference Breakage
+**Learning:** For expandable components like CitingPaperCard, using React's conditional rendering (`{isExpanded && <div id={id}>}`) completely removes the element from the DOM when collapsed. This causes the `aria-controls` attribute on the toggle button to point to a non-existent element, resulting in screen readers announcing that the button controls nothing.
+**Action:** Instead of conditional unmounting, always render the controlled element and use the HTML `hidden` attribute (e.g., `<div id={id} hidden={!isExpanded}>`) or `display: none` via CSS. This keeps the ID in the DOM so the `aria-controls` reference remains valid, while still hiding the content visually and from assistive technologies when collapsed.
