@@ -274,18 +274,21 @@ export default function App() {
 
           <div className="md-content-grid">
             <aside className="md-sidebar">
-              <div className="md-input-wrapper" style={{ position: 'relative' }}>
-                <span className="md-icon" aria-hidden="true">search</span>
-                <input
-                  ref={searchInputRef}
-                  className="md-input"
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search... (Press '/')"
-                  aria-label="Search title or authors"
-                  style={query ? { paddingRight: '40px' } : {}}
-                />
+              <div style={{ marginBottom: '8px' }}>
+                <label htmlFor="search-publications" className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)' }}>Search</label>
+                <div className="md-input-wrapper" style={{ position: 'relative' }}>
+                  <span className="md-icon" aria-hidden="true">search</span>
+                  <input
+                    id="search-publications"
+                    ref={searchInputRef}
+                    className="md-input"
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search... (Press '/')"
+                    aria-label="Search title or authors"
+                    style={query ? { paddingRight: '40px' } : {}}
+                  />
                 {query && (
                   <button
                     className="md-btn-icon"
@@ -297,6 +300,7 @@ export default function App() {
                     <span className="md-icon" aria-hidden="true" style={{ fontSize: '18px' }}>close</span>
                   </button>
                 )}
+                </div>
               </div>
 
               <YearRangeFilter 
@@ -774,12 +778,10 @@ function CitingPaperCard({ item }) {
         </span>
       </div>
       
-      {isExpanded && abstract && (
-        <div id={detailsId} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
-          {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
-          {abstract}
-        </div>
-      )}
+      <div id={detailsId} hidden={!isExpanded || !abstract} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
+        {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
+        {abstract}
+      </div>
     </div>
   );
 }
