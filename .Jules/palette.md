@@ -78,3 +78,8 @@
 ## 2025-06-29 - aria-controls Reference Breakage
 **Learning:** For expandable components like CitingPaperCard, using React's conditional rendering (`{isExpanded && <div id={id}>}`) completely removes the element from the DOM when collapsed. This causes the `aria-controls` attribute on the toggle button to point to a non-existent element, resulting in screen readers announcing that the button controls nothing.
 **Action:** Instead of conditional unmounting, always render the controlled element and use the HTML `hidden` attribute (e.g., `<div id={id} hidden={!isExpanded}>`) or `display: none` via CSS. This keeps the ID in the DOM so the `aria-controls` reference remains valid, while still hiding the content visually and from assistive technologies when collapsed.
+
+## 2025-03-02 - SPA Scroll Position on Navigation
+
+**Learning:** When navigating between different "pages" or views in a Single Page Application (SPA), the browser's scroll position is not automatically reset to the top. If a user is scrolled down far on one view and navigates to another, they might land on a seemingly blank page because the content of the new view doesn't extend as far down.
+**Action:** Always manually reset the scroll position using `window.scrollTo(0, 0)` when programmatic navigation causes a major view transition in an SPA.

@@ -160,6 +160,7 @@ export default function App() {
     url.searchParams.set('user', cleanId);
     window.history.pushState(null, '', url);
     setUserId(cleanId);
+    window.scrollTo(0, 0);
   }
 
   function goHome(e) {
@@ -168,6 +169,7 @@ export default function App() {
     url.searchParams.delete('user');
     window.history.pushState(null, '', url);
     setUserId('');
+    window.scrollTo(0, 0);
   }
 
   const publications = data?.publications || [];
@@ -287,6 +289,7 @@ export default function App() {
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search... (Press '/')"
                     aria-label="Search title or authors"
+                    aria-keyshortcuts="/"
                     style={query ? { paddingRight: '40px' } : {}}
                   />
                 {query && (
@@ -415,6 +418,7 @@ function LandingPage({ onNavigate }) {
               placeholder="e.g. vJjq9LwAAAAJ" 
               aria-label="Google Scholar User ID"
               required
+              autoFocus
             />
           </div>
           <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '18px' }}>
@@ -760,6 +764,7 @@ function CitingPaperCard({ item }) {
           aria-expanded={isExpanded}
           aria-controls={detailsId}
           aria-label={isExpanded ? `Collapse details for ${item.title}` : `Expand details for ${item.title}`}
+          title={isExpanded ? "Collapse" : "Expand"}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <span className="md-icon" aria-hidden="true" style={{ fontSize: '20px' }}>{isExpanded ? 'expand_less' : 'expand_more'}</span>
