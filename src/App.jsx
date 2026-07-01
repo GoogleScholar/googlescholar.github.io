@@ -259,9 +259,14 @@ export default function App() {
           <span className="md-icon" aria-hidden="true" style={{ fontSize: '48px', color: 'var(--md-error)', marginBottom: '16px' }}>error</span>
           <h2 className="md-headline" style={{ color: 'var(--md-error)' }}>Unable to load Scholar profile</h2>
           <p className="md-body" style={{ maxWidth: '400px', marginTop: '8px' }}>{status.error}</p>
-          <button className="md-btn md-btn-primary" style={{ marginTop: '24px' }} onClick={() => navigateToUser(userId)}>
-            Try Again
-          </button>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '24px', justifyContent: 'center' }}>
+            <button className="md-btn md-btn-text" onClick={(e) => goHome(e || { preventDefault: () => {} })}>
+              Change ID
+            </button>
+            <button className="md-btn md-btn-primary" onClick={() => navigateToUser(userId)}>
+              Try Again
+            </button>
+          </div>
         </div>
       )}
 

@@ -83,3 +83,6 @@
 
 **Learning:** When navigating between different "pages" or views in a Single Page Application (SPA), the browser's scroll position is not automatically reset to the top. If a user is scrolled down far on one view and navigates to another, they might land on a seemingly blank page because the content of the new view doesn't extend as far down.
 **Action:** Always manually reset the scroll position using `window.scrollTo(0, 0)` when programmatic navigation causes a major view transition in an SPA.
+## 2026-07-01 - Error State Escape Hatch
+**Learning:** Users who enter an invalid ID in the landing page are taken to a dead-end error state that only offers a 'Try Again' button, which creates frustration as it repeats the failed request.
+**Action:** Add an explicit 'Change ID' text button next to the retry button to provide a clear path back to the landing page.
