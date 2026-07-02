@@ -709,7 +709,7 @@ function Avatar({ name, src, size = 'small' }) {
 function LinkButton({ href, icon, label }) {
   if (!href) return null;
   return (
-    <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={`${label} (opens in a new tab)`} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }}>
+    <a className="md-btn-icon" href={href} target="_blank" rel="noreferrer" title={label} aria-label={`${label} (opens in a new tab)`} style={{ textDecoration: 'none', backgroundColor: 'var(--md-surface-variant)' }} onClick={(e) => e.stopPropagation()}>
       <span className="md-icon" aria-hidden="true">{icon}</span>
     </a>
   );
@@ -788,9 +788,9 @@ function CitingPaperCard({ item }) {
         </span>
       </div>
       
-      <div id={detailsId} hidden={!isExpanded || !abstract} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
+      <div id={detailsId} hidden={!isExpanded} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
         {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
-        {abstract}
+        {abstract || (!loadingAbstract && <span style={{ fontStyle: 'italic', color: 'var(--md-on-surface-variant)' }}>No abstract available.</span>)}
       </div>
     </div>
   );
