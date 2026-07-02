@@ -86,3 +86,7 @@
 ## 2026-07-01 - Error State Escape Hatch
 **Learning:** Users who enter an invalid ID in the landing page are taken to a dead-end error state that only offers a 'Try Again' button, which creates frustration as it repeats the failed request.
 **Action:** Add an explicit 'Change ID' text button next to the retry button to provide a clear path back to the landing page.
+
+## 2026-07-01 - Empty State Interaction Feedback
+**Learning:** Hiding an expandable details panel completely when there's no content (e.g. `hidden={!isExpanded || !abstract}`) causes the trigger button to appear broken. When the user clicks "Expand", nothing happens visually, leading to confusion and frustration.
+**Action:** Always show the expanded container when toggled, even if the primary content is missing, and provide an explicit empty state message (e.g. "No abstract available.") so the user understands the action was successful but the data is absent.
