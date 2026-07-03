@@ -111,7 +111,11 @@ export default function App() {
         }
         
         if (!response.ok) {
-          throw new Error(payload.error || `Scholar data request failed with ${response.status}`);
+          let errorMessage = payload.error || `Scholar data request failed with ${response.status}`;
+          if (response.status === 429 || errorMessage.includes('429')) {
+            errorMessage = "Google Scholar has temporarily rate-limited this server (429 Too Many Requests). As a workaround, you can run the backend locally via Docker to use your home IP address.";
+          }
+          throw new Error(errorMessage);
         }
 
         if (payload.error) {
