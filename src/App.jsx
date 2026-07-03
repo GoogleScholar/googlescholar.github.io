@@ -103,12 +103,17 @@ export default function App() {
           headers: { Accept: 'application/json' }
         });
         
-        if (!response.ok) {
+        let payload;
+        try {
+          payload = await response.json();
+        } catch (e) {
           throw new Error(`Scholar data request failed with ${response.status}`);
         }
-
-        const payload = await response.json();
         
+        if (!response.ok) {
+          throw new Error(payload.error || `Scholar data request failed with ${response.status}`);
+        }
+
         if (payload.error) {
            throw new Error(payload.error);
         }
