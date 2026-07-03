@@ -411,24 +411,29 @@ function LandingPage({ onNavigate }) {
           Enter a Google Scholar ID below to get started.
         </p>
 
-        <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', gap: '12px' }}>
-          <div className="md-input-wrapper" style={{ flex: 1 }}>
-            <span className="md-icon" aria-hidden="true">person</span>
-            <input 
-              className="md-input" 
-              style={{ fontSize: '16px', padding: '16px 16px 16px 48px' }}
-              type="text" 
-              value={input} 
-              onChange={e => setInput(e.target.value)} 
-              placeholder="e.g. vJjq9LwAAAAJ" 
-              aria-label="Google Scholar User ID"
-              required
-              autoFocus
-            />
+        <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <label htmlFor="scholar-id-input" className="md-label" style={{ marginBottom: '8px', display: 'block', color: 'var(--md-on-surface-variant)', textAlign: 'left' }}>
+            Google Scholar Profile ID or URL <span style={{ color: 'var(--md-error)' }}>*</span>
+          </label>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="md-input-wrapper" style={{ flex: 1 }}>
+              <span className="md-icon" aria-hidden="true">person</span>
+              <input
+                id="scholar-id-input"
+                className="md-input"
+                style={{ fontSize: '16px', padding: '16px 16px 16px 48px' }}
+                type="text"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="e.g. vJjq9LwAAAAJ"
+                required
+                autoFocus
+              />
+            </div>
+            <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '18px' }}>
+              Analyze
+            </button>
           </div>
-          <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '18px' }}>
-            Analyze
-          </button>
         </form>
       </div>
 
