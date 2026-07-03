@@ -25,6 +25,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       SCHOLAR_USER_ID: ${{ vars.SCHOLAR_USER_ID || 'vJjq9LwAAAAJ' }}
       SCHOLAR_SOURCE_URL: ${{ vars.SCHOLAR_SOURCE_URL }}
       SCHOLAR_PROFILE_NAME: ${{ vars.SCHOLAR_PROFILE_NAME }}
