@@ -90,3 +90,6 @@
 ## 2026-07-01 - Empty State Interaction Feedback
 **Learning:** Hiding an expandable details panel completely when there's no content (e.g. `hidden={!isExpanded || !abstract}`) causes the trigger button to appear broken. When the user clicks "Expand", nothing happens visually, leading to confusion and frustration.
 **Action:** Always show the expanded container when toggled, even if the primary content is missing, and provide an explicit empty state message (e.g. "No abstract available.") so the user understands the action was successful but the data is absent.
+## 2023-11-20 - Explicit Form Labels
+**Learning:** While `aria-label` is accessible, it removes the visible label context for sighted users which is important for usability. Forms should use visible `<label>` tags explicitly bound via `htmlFor` and `id` when the context allows.
+**Action:** When adding labels to prominent input fields (like a main search or ID input), prefer a visible, semantic `<label>` bound to the input using `htmlFor` and `id` over a visually hidden `aria-label`.
