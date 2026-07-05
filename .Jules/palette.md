@@ -93,3 +93,6 @@
 ## 2023-11-20 - Explicit Form Labels
 **Learning:** While `aria-label` is accessible, it removes the visible label context for sighted users which is important for usability. Forms should use visible `<label>` tags explicitly bound via `htmlFor` and `id` when the context allows.
 **Action:** When adding labels to prominent input fields (like a main search or ID input), prefer a visible, semantic `<label>` bound to the input using `htmlFor` and `id` over a visually hidden `aria-label`.
+## 2025-03-02 - Accessible Loading States in role="status"
+**Learning:** Using `role="status"` with an animated icon (e.g., a spinner) that is `aria-hidden="true"` and no accompanying text creates an empty live region. For screen reader users, this means the loading state is entirely silent, leaving them unaware that an asynchronous operation has started.
+**Action:** Always ensure that dynamically rendered `role="status"` (or `role="alert"`) regions contain visible or visually hidden text (e.g., "Loading citations...") alongside any decorative loading animations.
