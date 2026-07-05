@@ -676,7 +676,12 @@ function PaperCard({ publication, isExpanded, onToggle }) {
                )}
              </div>
 
-             {citedByLoading && <div className="md-state-panel" role="status" style={{ height: '200px' }}><span className="md-icon" aria-hidden="true" style={{ animation: 'spin 1s linear infinite', fontSize: '32px' }}>refresh</span></div>}
+             {citedByLoading && (
+               <div className="md-state-panel" role="status" style={{ height: '200px' }}>
+                 <span className="md-icon" aria-hidden="true" style={{ animation: 'spin 1s linear infinite', fontSize: '32px' }}>refresh</span>
+                 <span className="md-body" style={{ marginTop: '16px' }}>Loading citations...</span>
+               </div>
+             )}
              {citedByError && <div className="md-state-panel" role="alert" style={{ height: '200px', color: 'var(--md-error)' }}>{citedByError}</div>}
              {citedByData && (
                <>
@@ -803,7 +808,12 @@ function CitingPaperCard({ item }) {
       </div>
       
       <div id={detailsId} hidden={!isExpanded} style={{ fontSize: '13px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--md-outline-variant)', color: 'var(--md-on-surface)', lineHeight: '1.5' }}>
-        {loadingAbstract && <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', verticalAlign: 'middle', color: 'var(--md-primary)' }}>refresh</span>}
+        {loadingAbstract && (
+          <span style={{ display: 'inline-flex', alignItems: 'center' }} role="status">
+            <span className="md-icon" aria-hidden="true" style={{ fontSize: '14px', animation: 'spin 1s linear infinite', marginRight: '6px', color: 'var(--md-primary)' }}>refresh</span>
+            <span>Loading abstract...</span>
+          </span>
+        )}
         {abstract || (!loadingAbstract && <span style={{ fontStyle: 'italic', color: 'var(--md-on-surface-variant)' }}>No abstract available.</span>)}
       </div>
     </div>
