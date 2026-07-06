@@ -49,6 +49,7 @@ function saveRecentProfile(profile) {
 
 export default function App() {
   const [userId, setUserId] = useState(getInitialUserId);
+  const [retryKey, setRetryKey] = useState(0);
   const [data, setData] = useState(null);
   const [status, setStatus] = useState({ loading: false, error: '' });
   
@@ -152,7 +153,7 @@ export default function App() {
 
     loadData();
     return () => { isMounted = false; };
-  }, [userId]);
+  }, [userId, retryKey]);
 
   useEffect(() => {
     if (userId && data?.source?.profileName) {
@@ -272,7 +273,7 @@ export default function App() {
             <button className="md-btn md-btn-text" onClick={(e) => goHome(e || { preventDefault: () => {} })}>
               Change ID
             </button>
-            <button className="md-btn md-btn-primary" onClick={() => navigateToUser(userId)}>
+            <button className="md-btn md-btn-primary" onClick={() => setRetryKey(k => k + 1)}>
               Try Again
             </button>
           </div>

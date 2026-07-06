@@ -96,3 +96,10 @@
 ## 2025-03-02 - Accessible Loading States in role="status"
 **Learning:** Using `role="status"` with an animated icon (e.g., a spinner) that is `aria-hidden="true"` and no accompanying text creates an empty live region. For screen reader users, this means the loading state is entirely silent, leaving them unaware that an asynchronous operation has started.
 **Action:** Always ensure that dynamically rendered `role="status"` (or `role="alert"`) regions contain visible or visually hidden text (e.g., "Loading citations...") alongside any decorative loading animations.
+## 2023-11-20 - Silent Failure on Same-State Action
+**Learning:** If a user clicks a button to retry a failed operation, but the component relies on the underlying query parameter (e.g., `userId`) state for re-fetching, nothing will happen if the parameter hasn't changed. This breaks user expectation for retry actions.
+**Action:** When implementing retry functionality, include an explicit retry counter or key in state, add it to the dependency array of the fetching hook, and increment it on retry to force a re-render and re-fetch.
+
+## 2023-11-20 - Missing Animation Keyframes
+**Learning:** Components frequently reference utility animations (like `spin` for loading indicators), but if the global CSS lacks the `@keyframes` definition, these icons fail silently and appear broken or inactive, giving the user poor visual feedback for background processes.
+**Action:** Always verify that the keyframes referenced in inline styles or utility classes exist in the global stylesheet. For common states like loading, explicitly add an `@keyframes spin` definition to ensure animations work correctly.
