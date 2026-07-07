@@ -183,10 +183,16 @@ html, body {
   color: var(--md-on-primary);
   box-shadow: 0 2px 4px color-mix(in srgb, var(--md-primary) 30%, transparent);
 }
-.md-btn-primary:hover {
+.md-btn-primary:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--md-primary), black 10%);
   box-shadow: 0 4px 6px color-mix(in srgb, var(--md-primary) 40%, transparent);
   transform: translateY(-1px);
+}
+
+.md-btn:disabled,
+.md-btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .md-btn-text {

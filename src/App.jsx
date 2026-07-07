@@ -440,7 +440,14 @@ function LandingPage({ onNavigate }) {
                 autoFocus
               />
             </div>
-            <button type="submit" className="md-btn md-btn-primary" style={{ padding: '0 32px', fontSize: '18px' }}>
+            <button
+              type="submit"
+              className="md-btn md-btn-primary"
+              style={{ padding: '0 32px', fontSize: '18px' }}
+              disabled={!input.trim()}
+              aria-disabled={!input.trim()}
+              title={!input.trim() ? "Enter a Scholar ID to analyze" : "Analyze profile"}
+            >
               Analyze
             </button>
           </div>
