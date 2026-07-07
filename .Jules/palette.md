@@ -103,3 +103,7 @@
 ## 2023-11-20 - Missing Animation Keyframes
 **Learning:** Components frequently reference utility animations (like `spin` for loading indicators), but if the global CSS lacks the `@keyframes` definition, these icons fail silently and appear broken or inactive, giving the user poor visual feedback for background processes.
 **Action:** Always verify that the keyframes referenced in inline styles or utility classes exist in the global stylesheet. For common states like loading, explicitly add an `@keyframes spin` definition to ensure animations work correctly.
+
+## 2024-07-07 - Interactive Disabled States
+**Learning:** Adding `pointer-events: none` to a disabled button's CSS hides the `cursor: not-allowed` style and prevents the `title` tooltip from displaying. Users need to be able to hover over disabled elements to understand why they are disabled.
+**Action:** When styling a disabled state, use `opacity` and `cursor: not-allowed` but avoid `pointer-events: none` so that tooltips and custom cursors remain functional. Ensure `aria-disabled` and an informative `title` are included.
