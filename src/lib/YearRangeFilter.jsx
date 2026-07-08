@@ -36,10 +36,26 @@ export function YearRangeFilter({ publications, yearRange, onChange }) {
   const currentMin = yearRange[0] ?? minYear;
   const currentMax = yearRange[1] ?? maxYear;
 
+  const isFiltering = yearRange.length === 2 && (currentMin !== minYear || currentMax !== maxYear);
+
   return (
     <div style={{ marginTop: '24px', marginBottom: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8px' }}>
-        <label className="md-title" style={{ fontSize: '14px', margin: 0 }}>Year Published</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span id="year-filter-label" className="md-title" style={{ fontSize: '14px', margin: 0 }}>Year Published</span>
+          {isFiltering && (
+            <button
+              type="button"
+              className="md-btn-text"
+              style={{ fontSize: '12px', padding: '2px 6px', minHeight: 'auto', lineHeight: '1' }}
+              onClick={() => onChange([])}
+              aria-label="Clear year filter"
+              title="Clear filter"
+            >
+              Clear
+            </button>
+          )}
+        </div>
         <span className="md-body" style={{ fontSize: '13px', color: 'var(--md-on-surface-variant)' }}>
           {currentMin} - {currentMax}
         </span>

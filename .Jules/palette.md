@@ -107,3 +107,7 @@
 ## 2024-07-07 - Interactive Disabled States
 **Learning:** Adding `pointer-events: none` to a disabled button's CSS hides the `cursor: not-allowed` style and prevents the `title` tooltip from displaying. Users need to be able to hover over disabled elements to understand why they are disabled.
 **Action:** When styling a disabled state, use `opacity` and `cursor: not-allowed` but avoid `pointer-events: none` so that tooltips and custom cursors remain functional. Ensure `aria-disabled` and an informative `title` are included.
+
+## 2025-03-02 - Clear Action for Filter States
+**Learning:** Users can get trapped in filtered states when using complex controls like a range slider or clicking a chart bar to filter, making it difficult to reset the view.
+**Action:** Always provide an explicit, easy-to-click 'Clear' button alongside complex filters when they are active.
